@@ -10,7 +10,8 @@ Features:
  - Make lookup tables for upto 8 colours
  - Save/load thresholds
 
-![alt tag](https://raw.github.com/apoorvumang/epuck-main/master/screenshot-calibGUI.png)
+![Screenshot](screenshot-calibGUI.png "Screenshot of usage")
+
 
 Main Program
 ---------------
@@ -22,4 +23,5 @@ Reference to algorithms:
  - Probabilistic: (http://ddsg.jaist.ac.jp/pub/SDK04b.pdf)
  - Dining Philosopher's: (http://www.researchgate.net/publication/258884849_A_Distributed_Algorithm_for_Circle_Formation_by_Multiple_Mobile_Robots)
 
-![alt tag](https://raw.github.com/apoorvumang/epuck-main/master/screenshot-cfp.png)
+![Screenshot](screenshot-cfp.png "Screenshot of a run")
+
