@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cameraworker.h'
 **
-** Created: Tue Feb 4 12:43:52 2014
+** Created: Thu Mar 13 01:56:26 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

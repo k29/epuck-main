@@ -28,5 +28,6 @@ public:
 };
 
 #define BLOB_MIN_AREA 100
+#define NUMBOTS 8
 
 #endif

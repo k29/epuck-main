@@ -2,7 +2,6 @@
 #define BELIEFSTATE_H
 
 #include "commondefs.h"
-#define NUMBOTS 5
 
 class BeliefState
 {
