@@ -43,7 +43,7 @@ void AlgoWorker::process()
     {
         lastMove[i] = STOP;
     }
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         char buffer[100];
         sprintf(buffer, "/dev/rfcomm%d", i);
@@ -680,133 +680,6 @@ void AlgoWorker::onTimeout()
 //        qDebug() << "YOOOOOOOOOOO\n";
         switch(currentState)
         {
-//        case GETTING_LINE_POINTS:
-//            getLinePoints();
-//            currentState = MOVING_TO_LINE;
-//            emit gotLine(linePoint[0].x, linePoint[0].y, linePoint[1].x, linePoint[1].y);
-//            break;
-//        case MOVING_TO_LINE:
-//        {
-//            int numReached = 0;
-//            for(int i = 0; i<5; i++)
-//            {
-//                if(!isLeftMost(i) && !isRightMost(i))
-//                {
-//                    CvPoint p = getPerpendicularPoint(i);
-//                    if(moveToPointOpti(p, localBS.bot[i], i))
-//                    {
-//                        numReached++;
-//                    }
-//                }
-//                else
-//                {
-//                    moveStop(i);
-//                }
-//            }
-//            if(numReached == 3)
-//            {
-//                currentState = ORIENTING;
-//                qDebug() << "reached orienting";
-//            }
-//       }
-//            break;
-//        case ORIENTING:
-//        {
-//            CvPoint p = getPerpendicularPoint(cvPoint(-100, 0));
-//            int numTurned = 0;
-//            for(int i = 0; i < 5; ++i)
-//            {
-//                if(turnToPoint(p, localBS.bot[i], i))
-//                    numTurned++;
-//            }
-//            if(numTurned == 5)
-//            {
-//                qDebug() << "All turned";
-//                currentState = POSITIONING;
-//                for(int i = 0; i < 5; ++i)
-//                {
-//                    isBotMoving[i] = false;
-//                }
-//            }
-//        }
-//            break;
-
-//         case POSITIONING:
-//        {
-
-//            //check if all 5 are at neighbour mid-points. if so, algorithm is complete
-//            //otherwise, for each bot not at neighbour mid-point, make it move
-//            //halfway to that point
-
-//            for(int i = 0; i<5; i++)
-//            {
-//                if(!isLeftMost(i) && !isRightMost(i))
-//                {
-//                    if(!isBotMoving[i])
-//                    {
-//                        destinationPoint[i] = getMidPoint(getMidPoint(getLeftNeighbourPoint(i), getRightNeighbourPoint(i)), cvPoint(localBS.bot[i].x, localBS.bot[i].y));
-//                        isBotMoving[i] = true;
-//                    }
-//                    else
-//                    {
-//                        //do nothing. destinationPoint[i] remains same.
-//                    }
-//                }
-//                else
-//                {
-//                    destinationPoint[i] = cvPoint(localBS.bot[i].x, localBS.bot[i].y);
-//                    isBotMoving[i] = false;
-//                }
-//            }
-
-//            PointList5 temp;
-//            for(int i = 0; i < 5; ++i)
-//            {
-//                temp.p[i] = destinationPoint[i];
-//            }
-
-//            emit printDestination(temp);
-//            for(int i = 0; i<5; i++)
-//            {
-//                if(isBotMoving[i])
-//                {
-//                    if(moveToPointOpti(destinationPoint[i], localBS.bot[i], i))
-//                    {
-//                        isBotMoving[i] = false;
-//                    }
-//                }
-//            }
-
-//            //checking if final position has been reached
-//            int numCompleted = 0;
-//            for(int i = 0; i < 5; ++i)
-//            {
-//                if(!isLeftMost(i) && !isRightMost(i))
-//                {
-//                    CvPoint p = getMidPoint(getLeftNeighbourPoint(i), getRightNeighbourPoint(i));
-//                    if(getDistance(p, cvPoint(localBS.bot[i].x, localBS.bot[i].y)) < 20)
-//                        numCompleted++;
-//                }
-//                else
-//                {
-//                    numCompleted++;
-//                }
-//            }
-//            if(numCompleted == 5)
-//            {
-
-//                    qDebug() << "Reached correct positions. Algorithm stopping.";
-//                    currentState = FINISHED;
-//                    moveStopAll();
-//                    sleep(10);
-
-//            }
-
-////            qDebug() << numCompleted;
-
-//        }
-
-//            break;
 
         case SAVE_CURRENT_POSITION:
             for(int i = 0; i < 5; ++i)
