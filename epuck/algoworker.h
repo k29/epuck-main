@@ -34,14 +34,14 @@ public slots:
     void onStopAlgo();
 signals:
     void gotLine(int x1, int y1, int x2, int y2);
-    void printDestination(PointList5 p);
+    void printDestination(PointList p);
     void printCircle(Circle c);
     void finished();
     void error(QString err);
 
 
 private:
-    HAL::Serial s[5];
+    HAL::Serial s[NUMBOTS];
     QTimer *timer;
     QMutex* bsMutex;
     QThread* myThread;
@@ -60,8 +60,8 @@ private:
     void turnLedOn(int n);
     void turnLedOff(int n);
     CvPoint linePoint[2];
-    CvPoint destinationPoint[5];
-    CvPoint savedPosition[5];
+    CvPoint destinationPoint[NUMBOTS];
+    CvPoint savedPosition[NUMBOTS];
     Circle destinationCircle;
     int robotActive;
     bool moveToPoint(CvPoint p, Bot bot, int n);
@@ -72,8 +72,8 @@ private:
     void nextIteration();
     bool isLeftMost(int i);
     bool isRightMost(int i);
-    bool isBotMoving[5];
-    MoveDirection lastMove[5];
+    bool isBotMoving[NUMBOTS];
+    MoveDirection lastMove[NUMBOTS];
     int numBotMoving;
     int numActivations;
     int numRounds;

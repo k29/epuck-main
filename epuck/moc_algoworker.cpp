@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'algoworker.h'
 **
-** Created: Tue Feb 4 12:43:53 2014
+** Created: Sat May 10 05:46:37 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -33,16 +33,16 @@ static const uint qt_meta_data_AlgoWorker[] = {
  // signals: signature, parameters, type, tag, flags
       24,   12,   11,   11, 0x05,
       51,   49,   11,   11, 0x05,
-      82,   80,   11,   11, 0x05,
-     102,   11,   11,   11, 0x05,
-     117,  113,   11,   11, 0x05,
+      81,   79,   11,   11, 0x05,
+     101,   11,   11,   11, 0x05,
+     116,  112,   11,   11, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-     132,   11,   11,   11, 0x0a,
-     142,   11,   11,   11, 0x0a,
-     154,   11,   11,   11, 0x0a,
-     163,   11,   11,   11, 0x0a,
-     177,   11,   11,   11, 0x0a,
+     131,   11,   11,   11, 0x0a,
+     141,   11,   11,   11, 0x0a,
+     153,   11,   11,   11, 0x0a,
+     162,   11,   11,   11, 0x0a,
+     176,   11,   11,   11, 0x0a,
 
        0        // eod
 };
@@ -50,7 +50,7 @@ static const uint qt_meta_data_AlgoWorker[] = {
 static const char qt_meta_stringdata_AlgoWorker[] = {
     "AlgoWorker\0\0x1,y1,x2,y2\0"
     "gotLine(int,int,int,int)\0p\0"
-    "printDestination(PointList5)\0c\0"
+    "printDestination(PointList)\0c\0"
     "printCircle(Circle)\0finished()\0err\0"
     "error(QString)\0process()\0onTimeout()\0"
     "onStop()\0onStartAlgo()\0onStopAlgo()\0"
@@ -63,7 +63,7 @@ void AlgoWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         AlgoWorker *_t = static_cast<AlgoWorker *>(_o);
         switch (_id) {
         case 0: _t->gotLine((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
-        case 1: _t->printDestination((*reinterpret_cast< PointList5(*)>(_a[1]))); break;
+        case 1: _t->printDestination((*reinterpret_cast< PointList(*)>(_a[1]))); break;
         case 2: _t->printCircle((*reinterpret_cast< Circle(*)>(_a[1]))); break;
         case 3: _t->finished(); break;
         case 4: _t->error((*reinterpret_cast< QString(*)>(_a[1]))); break;
@@ -124,7 +124,7 @@ void AlgoWorker::gotLine(int _t1, int _t2, int _t3, int _t4)
 }
 
 // SIGNAL 1
-void AlgoWorker::printDestination(PointList5 _t1)
+void AlgoWorker::printDestination(PointList _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

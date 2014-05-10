@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cameraworker.h'
 **
-** Created: Thu Mar 13 01:56:26 2014
+** Created: Sat May 10 05:46:36 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -41,7 +41,7 @@ static const uint qt_meta_data_CameraWorker[] = {
       90,   13,   13,   13, 0x0a,
      111,   99,   13,   13, 0x0a,
      140,  138,   13,   13, 0x0a,
-     173,  171,   13,   13, 0x0a,
+     172,  170,   13,   13, 0x0a,
 
        0        // eod
 };
@@ -51,7 +51,7 @@ static const char qt_meta_stringdata_CameraWorker[] = {
     "error(QString)\0pm\0imageReady(QPixmap*)\0"
     "process()\0onTimeout()\0onStop()\0"
     "x1,y1,x2,y2\0onGotLine(int,int,int,int)\0"
-    "p\0onPrintDestination(PointList5)\0c\0"
+    "p\0onPrintDestination(PointList)\0c\0"
     "onPrintCircle(Circle)\0"
 };
 
@@ -68,7 +68,7 @@ void CameraWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 4: _t->onTimeout(); break;
         case 5: _t->onStop(); break;
         case 6: _t->onGotLine((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
-        case 7: _t->onPrintDestination((*reinterpret_cast< PointList5(*)>(_a[1]))); break;
+        case 7: _t->onPrintDestination((*reinterpret_cast< PointList(*)>(_a[1]))); break;
         case 8: _t->onPrintCircle((*reinterpret_cast< Circle(*)>(_a[1]))); break;
         default: ;
         }

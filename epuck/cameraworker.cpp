@@ -101,7 +101,7 @@ void CameraWorker::onGotLine(int x1, int y1, int x2, int y2)
     isLinePresent = true;
 }
 
-void CameraWorker::onPrintDestination(PointList5 p)
+void CameraWorker::onPrintDestination(PointList p)
 {
     isDestinationPresent = true;
     for(int i = 0; i < 5; ++i)

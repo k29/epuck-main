@@ -28,7 +28,7 @@ public slots:
     void onTimeout();
     void onStop();
     void onGotLine(int x1, int y1, int x2, int y2);
-    void onPrintDestination(PointList5 p);
+    void onPrintDestination(PointList p);
     void onPrintCircle(Circle c);
 
 signals:

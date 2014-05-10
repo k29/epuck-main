@@ -4,7 +4,7 @@
 #include <opencv2/opencv.hpp>
 
 //enum Command {FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, STOP, SPEED1, SPEED2, SPEED3, SPEED4, F_PULSE, B_PULSE, L_PULSE, R_PULSE};
-
+#define NUMBOTS 8
 //plz to store angle in radians
 struct Bot
 {
@@ -14,10 +14,10 @@ struct Bot
     bool isVisible;
 };
 
-class PointList5
+class PointList
 {
 public:
-    CvPoint p[5];
+    CvPoint p[NUMBOTS];
 };
 
 class Circle
@@ -28,6 +28,6 @@ public:
 };
 
 #define BLOB_MIN_AREA 100
-#define NUMBOTS 8
+
 
 #endif

@@ -39,7 +39,7 @@ void AlgoWorker::process()
     currentState = SAVE_CURRENT_POSITION;
     currentAlgo = DINING_PHILOSOPHER;
     robotActive = 0;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         lastMove[i] = STOP;
     }
@@ -244,7 +244,7 @@ bool AlgoWorker::isLeftMost(int n)
 {
     int smallestN = 0;
     double smallestX = 999999;
-    for(int i = 0; i<5; ++i)
+    for(int i = 0; i<NUMBOTS; ++i)
     {
         if(localBS.bot[i].x < smallestX)
         {
@@ -263,7 +263,7 @@ bool AlgoWorker::isRightMost(int n)
 {
     int largestN = 0;
     double largestX = -1;
-    for(int i = 0; i<5; ++i)
+    for(int i = 0; i<NUMBOTS; ++i)
     {
         if(localBS.bot[i].x > largestX)
         {
@@ -281,7 +281,7 @@ bool AlgoWorker::isRightMost(int n)
 
 void AlgoWorker::getLinePoints()
 {
-    for(int i = 0; i<5; ++i)
+    for(int i = 0; i<NUMBOTS; ++i)
     {
         if(isLeftMost(i))
         {
@@ -328,7 +328,7 @@ CvPoint AlgoWorker::getLeftNeighbourPoint(int n)
     double refX = localBS.bot[n].x;
     int botNum = 0;
     double x = -9999;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         if(localBS.bot[i].x > x && localBS.bot[i].x < refX && i!=n)
         {
@@ -345,7 +345,7 @@ CvPoint AlgoWorker::getRightNeighbourPoint(int n)
     double refX = localBS.bot[n].x;
     int botNum = 0;
     double x = 9999;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         if(localBS.bot[i].x < x && localBS.bot[i].x > refX && i!=n)
         {
@@ -361,8 +361,8 @@ CvPoint AlgoWorker::getRightNeighbourPoint(int n)
 CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
 {
     double refAngle;
-    double angle[5];
-    for(int i = 0; i < 5; ++i)
+    double angle[NUMBOTS];
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         angle[i] = atan2((double)localBS.bot[i].y - destinationCircle.centre.y,(double) localBS.bot[i].x - destinationCircle.centre.x);
         if(angle[i] < 0)
@@ -375,7 +375,7 @@ CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
     int m[2];
     m[0] = m[1] = 0;
     double minDiff = 10000.0, maxDiff = -10000.0;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         double tempAngle = refAngle - angle[i];
         while(tempAngle < 0)
@@ -452,8 +452,8 @@ CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
 CvPoint AlgoWorker::getPointToMoveAlgo2(int n)
 {
     double refAngle;
-    double angle[5];
-    for(int i = 0; i < 5; ++i)
+    double angle[NUMBOTS];
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         angle[i] = atan2((double)localBS.bot[i].y - destinationCircle.centre.y, (double)localBS.bot[i].x - destinationCircle.centre.x);
         if(angle[i] < 0)
@@ -466,7 +466,7 @@ CvPoint AlgoWorker::getPointToMoveAlgo2(int n)
     int m[2];
     m[0] = m[1] = 0;
     double minDiff = 10000.0, maxDiff = -10000.0;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         double tempAngle = refAngle - angle[i];
         while(tempAngle < 0)
@@ -608,8 +608,8 @@ CvPoint AlgoWorker::getPerpPointOnCircle(int n)
 void AlgoWorker::getNeighbourIndicesCircle(int n, int* indexList)
 {
     double refAngle;
-    double angle[5];
-    for(int i = 0; i < 5; ++i)
+    double angle[NUMBOTS];
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         angle[i] = atan2(localBS.bot[i].y - destinationCircle.centre.y, localBS.bot[i].x - destinationCircle.centre.x);
         if(angle[i] < 0)
@@ -622,7 +622,7 @@ void AlgoWorker::getNeighbourIndicesCircle(int n, int* indexList)
     int m[2];
     m[0] = m[1] = 0;
     double minDiff = 10000.0, maxDiff = -10000.0;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         double tempAngle = refAngle - angle[i];
         while(tempAngle < 0)
@@ -667,7 +667,7 @@ void AlgoWorker::onTimeout()
 //    return;
     int allBotVisible = 0;
 
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         if(localBS.bot[i].isVisible)
             allBotVisible++;
@@ -675,14 +675,14 @@ void AlgoWorker::onTimeout()
 //    qDebug() << "Y222OOOOOOOOOOO";
 
 //    qDebug() << avail3;
-    if(allBotVisible == 5 && isBSAvailable)
+    if(allBotVisible == NUMBOTS && isBSAvailable)
     {
 //        qDebug() << "YOOOOOOOOOOO\n";
         switch(currentState)
         {
 
         case SAVE_CURRENT_POSITION:
-            for(int i = 0; i < 5; ++i)
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 savedPosition[i] = cvPoint(localBS.bot[i].x, localBS.bot[i].y);
             }
@@ -692,12 +692,12 @@ void AlgoWorker::onTimeout()
         case MOVE_TO_SAVED_POSITION:
         {
             int numCompleted = 0;
-            for(int i = 0; i < 5; ++i)
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 if(moveToPoint(savedPosition[i], localBS.bot[i], i))
                     numCompleted++;
             }
-            if(numCompleted == 5)
+            if(numCompleted == NUMBOTS)
             {
                 qDebug() << "Reached random points";
                 currentState = MAKE_CIRCLE;
@@ -710,7 +710,7 @@ void AlgoWorker::onTimeout()
             std::vector<cv::Point> pList;
             cv::Point2f centre;
             float radius;
-            for(int i=0; i < 5; ++i)
+            for(int i=0; i < NUMBOTS; ++i)
             {
                 pList.push_back(cv::Point(localBS.bot[i].x, localBS.bot[i].y));
             }
@@ -720,7 +720,7 @@ void AlgoWorker::onTimeout()
             destinationCircle.radius = radius;
             emit printCircle(destinationCircle);
 
-            for(int i = 0; i < 5; ++i)
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 destinationPoint[i] = getPerpPointOnCircle(i);
                 if(destinationPoint[i].y > 470)
@@ -736,8 +736,8 @@ void AlgoWorker::onTimeout()
 //                qDebug() << destinationPoint[i].x << destinationPoint[i].y;
             }
 
-            PointList5 temp;
-            for(int i = 0; i < 5; ++i)
+            PointList temp;
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 temp.p[i] = destinationPoint[i];
             }
@@ -746,7 +746,7 @@ void AlgoWorker::onTimeout()
 //            sleep(10);
 //            usleep(2000000);
             currentState = MOVE_TO_CIRCLE;
-            for(int i = 0; i<5; ++i)
+            for(int i = 0; i<NUMBOTS; ++i)
             {
                 turnLedOff(i);
             }
@@ -758,12 +758,12 @@ void AlgoWorker::onTimeout()
         case MOVE_TO_CIRCLE:
         {
             int numCompleted = 0;
-            for(int i = 0; i < 5; ++i)
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 if(moveToPoint(destinationPoint[i], localBS.bot[i], i))
                     numCompleted++;
             }
-            if(numCompleted == 5)
+            if(numCompleted == NUMBOTS)
             {
                 qDebug() << "Positioning on circle started";
                 currentState = POSITIONING_ON_CIRCLE_1;
@@ -781,7 +781,7 @@ void AlgoWorker::onTimeout()
 //            qDebug() << "New Iteration Start.";
             //check if robots are evenly distributed
             bool isFinalPositionReached = true;
-            for(int i = 0; i < 5; ++i)
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 CvPoint dest = getPointToMoveAlgo2(i);
                 if(getDistance(dest, cvPoint(localBS.bot[i].x, localBS.bot[i].y)) > 20)
@@ -792,7 +792,7 @@ void AlgoWorker::onTimeout()
             }
             if(isFinalPositionReached)
             {
-                for(int i = 0; i < 5; ++i)
+                for(int i = 0; i < NUMBOTS; ++i)
                 {
                     turnLedOff(i);
                 }
@@ -801,7 +801,7 @@ void AlgoWorker::onTimeout()
             }
             if(currentAlgo != DINING_PHILOSOPHER)
             {
-                for(int i = 0; i < 5; i++)
+                for(int i = 0; i < NUMBOTS; i++)
                 {
                     if(currentAlgo == PROBABILISTIC_HALF)
                     {
@@ -828,8 +828,8 @@ void AlgoWorker::onTimeout()
             }
             else if(currentAlgo == DINING_PHILOSOPHER)
             {
-                int state[5];
-                for(int i = 0; i < 5; ++i)
+                int state[NUMBOTS];
+                for(int i = 0; i < NUMBOTS; ++i)
                 {
                     state[i] = -1;
                 }
@@ -840,7 +840,7 @@ void AlgoWorker::onTimeout()
                 isBotMoving[robotActive] = true;
                 destinationPoint[robotActive] = getPointToMoveAlgo2(robotActive);
 
-                for(int i = 0; i < 5; ++i)
+                for(int i = 0; i < NUMBOTS; ++i)
                 {
                     int indexList[2];
                     getNeighbourIndicesCircle(i, indexList);
@@ -863,7 +863,7 @@ void AlgoWorker::onTimeout()
 
             numBotMoving = 0;
             numRounds++;
-            for(int i = 0; i<5; ++i)
+            for(int i = 0; i<NUMBOTS; ++i)
             {
                 if(isBotMoving[i])
                 {
@@ -878,8 +878,8 @@ void AlgoWorker::onTimeout()
                 }
             }
             //for showing
-            PointList5 temp;
-            for(int i = 0; i < 5; ++i)
+            PointList temp;
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 temp.p[i] = destinationPoint[i];
             }
@@ -893,7 +893,7 @@ void AlgoWorker::onTimeout()
         {
 //            qDebug() << "In Positioning 2";
             int count = 0;
-            for(int i = 0; i < 5; ++i)
+            for(int i = 0; i < NUMBOTS; ++i)
             {
                 if(isBotMoving[i])
                 {
@@ -907,7 +907,7 @@ void AlgoWorker::onTimeout()
             {
 //                qDebug() << "inside";
                 robotActive++;
-                if(robotActive >= 5)
+                if(robotActive >= NUMBOTS)
                     robotActive = 0;
                 currentState = POSITIONING_ON_CIRCLE_1;
             }
@@ -950,7 +950,7 @@ void AlgoWorker::onStop()
 //    s.Close();
 
     moveStopAll();
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
 //        s[i].WriteString(std::string("d,0,0"));
         s[i].Close();
@@ -958,7 +958,7 @@ void AlgoWorker::onStop()
 
 //    usleep(1000000);
 
-//    for(int i = 0; i < 5; ++i)
+//    for(int i = 0; i < NUMBOTS; ++i)
 //    {
 //        s[i].Close();
 //    }
@@ -1017,7 +1017,7 @@ void AlgoWorker::moveStop(int n)
 
 void AlgoWorker::moveStopAll()
 {
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         moveStop(i);
     }

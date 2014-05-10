@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     bs = NULL;
 
     cw = new CameraWorker(cameraThread, camMutex, &bs, bsMutex);
-    qRegisterMetaType<PointList5>("PointList5");
+    qRegisterMetaType<PointList>("PointList");
     qRegisterMetaType<Circle>("Circle");
     cw->moveToThread(cameraThread);
 //    connect(cw, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(aw, SIGNAL(gotLine(int, int, int, int)), cw, SLOT(onGotLine(int, int, int, int)));
-    connect(aw, SIGNAL(printDestination(PointList5)), cw, SLOT(onPrintDestination(PointList5)));
+    connect(aw, SIGNAL(printDestination(pointlist)), cw, SLOT(onPrintDestination(pointlist)));
     connect(aw, SIGNAL(printCircle(Circle)), cw, SLOT(onPrintCircle(Circle)));
     getfps.start();
 
