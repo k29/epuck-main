@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(aw, SIGNAL(gotLine(int, int, int, int)), cw, SLOT(onGotLine(int, int, int, int)));
-    connect(aw, SIGNAL(printDestination(pointlist)), cw, SLOT(onPrintDestination(pointlist)));
+    connect(aw, SIGNAL(printDestination(PointList)), cw, SLOT(onPrintDestination(PointList)));
     connect(aw, SIGNAL(printCircle(Circle)), cw, SLOT(onPrintCircle(Circle)));
     getfps.start();
 

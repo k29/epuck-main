@@ -673,11 +673,11 @@ void AlgoWorker::onTimeout()
             allBotVisible++;
     }
 //    qDebug() << "Y222OOOOOOOOOOO";
-
 //    qDebug() << avail3;
     if(allBotVisible == NUMBOTS && isBSAvailable)
     {
 //        qDebug() << "YOOOOOOOOOOO\n";
+
         switch(currentState)
         {
 

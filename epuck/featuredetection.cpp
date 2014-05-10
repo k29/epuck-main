@@ -190,8 +190,14 @@ void FeatureDetection::printBot(CamCapture &cam, int num)
     CvPoint p2;
     p2.x = p1.x + 30.0*cos(bs.bot[num].angle);
     p2.y = p1.y + 30.0*sin(bs.bot[num].angle);
-
-    cvLine(cam.rgbimg, p1, p2, cvScalar(255,255,255), 3);
+    char buf[20];
+    sprintf(buf, "%d", num);
+    CvFont font;
+    cvInitFont(&font, CV_FONT_HERSHEY_PLAIN, 1, 1);
+    cvLine(cam.rgbimg, p1, p2, cvScalar(50,50,50), 3);
+    cvPutText(cam.rgbimg, buf, cvPoint(p1.x, p1.y - 20), &font, cvScalar(0,0,0));
+    cvPutText(cam.rgbimg, buf, cvPoint(p1.x-1, p1.y - 21), &font, cvScalar(0,255,255));
+    cvCircle(cam.rgbimg, p1, 3, cvScalar(255, 255, 255), 2);
 }
 
 FeatureDetection::customBlob FeatureDetection::getClosest(CvPoint2D64f p, std::vector<customBlob> v)
