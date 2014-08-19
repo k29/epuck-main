@@ -6,14 +6,14 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += widgets
 
 TARGET = epuck
 TEMPLATE = app
 
 
-LIBS += -L/usr/local/lib `pkg-config --libs opencv` -ltbb -lcvblob
-
+LIBS += -L/usr/lib `pkg-config --libs opencv` -ltbb -lcvblob
+LIBS += -L/usr/local/lib
 
 SOURCES += main.cpp\
         mainwindow.cpp \
