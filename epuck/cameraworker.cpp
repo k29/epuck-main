@@ -24,24 +24,48 @@ void CameraWorker::process()
 {
     // allocate resources using new here
     qDebug() << "Camera Worker thread started.";
+#ifndef SIMULATION
     cc = new CamCapture(true);//, "../pic-2.jpg");
+#endif
+#ifdef SIMULATION
+    cc = new CamCapture(true, "./test.png");
+#endif
     cc->init(CAMNUM);
     fd = new FeatureDetection(*cc);
+#ifdef SIMULATION
+    fd->initBSSimulation();
+    bsMutex->lock();
+    if(*bs)
+        delete (*bs);
+    (*bs) = new BeliefState(fd->bs);
+    bsMutex->unlock();
+#endif
     timer->setSingleShot(true);
     timer->start(10);
     isLinePresent = false;
     isDestinationPresent = false;
 }
 
+
+
 void CameraWorker::onTimeout()
 {
     cc->getImage();
+#ifndef SIMULATION
     fd->updateBeliefState(*cc);
+#endif
 
     bsMutex->lock();
+#ifndef SIMULATION
     if(*bs)
         delete (*bs);
     (*bs) = new BeliefState(fd->bs);
+#endif
+#ifdef SIMULATION
+//    fd->updateBeliefStateSimulation();
+    //also draw bots on the image
+    fd->printBotSimulation(cc, **bs);
+#endif
     bsMutex->unlock();
 
     if(isLinePresent)

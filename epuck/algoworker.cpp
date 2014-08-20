@@ -37,12 +37,13 @@ void AlgoWorker::process()
     frameCounter = 0;
     isRunning = false;
     currentState = SAVE_CURRENT_POSITION;
-    currentAlgo = DINING_PHILOSOPHER;
+    currentAlgo = PROBABILISTIC_0;
     robotActive = 0;
     for(int i = 0; i < NUMBOTS; ++i)
     {
         lastMove[i] = STOP;
     }
+#ifndef SIMULATION
     for(int i = 0; i < NUMBOTS; ++i)
     {
         char buffer[100];
@@ -57,7 +58,17 @@ void AlgoWorker::process()
         }
 
     }
-
+#endif
+#ifdef SIMULATION
+    for(int i = 0; i < NUMBOTS; ++i)
+    {
+        localBS.bot[i].isVisible = true;
+        localBS.bot[i].x = qrand()%300+200;
+        localBS.bot[i].y = qrand()%200 + 150;
+        localBS.bot[i].angle = CV_PI;
+    }
+#endif
+    qDebug() << "Ok\n";
     timer->setSingleShot(true);
     timer->start(10);
 }
@@ -647,18 +658,23 @@ void AlgoWorker::getNeighbourIndicesCircle(int n, int* indexList)
 void AlgoWorker::onTimeout()
 {
     bool isBSAvailable = false;
-//    printf(":here\n");
     bsMutex->lock();
     if(bs)
     {
         if(*bs)
         {
+#ifdef SIMULATION
+            *(*bs) = localBS;
+#endif
+#ifndef SIMULATION
             localBS = *(*bs);
+#endif
             isBSAvailable = true;
 //             qDebug() << "Printing bs value " << localBS.bot[0].angle;
         }
     }
     bsMutex->unlock();
+//    localBS.bot[0].angle += 2;
 //    printf("Outside lock\n");
 
 //    timer->setSingleShot(true);
@@ -767,7 +783,7 @@ void AlgoWorker::onTimeout()
             {
                 qDebug() << "Positioning on circle started";
                 currentState = POSITIONING_ON_CIRCLE_1;
-                sleep(10);
+//                sleep(10);
                 numRounds = 0;
                 numActivations = 0;
                 totDistance = 0.0;
@@ -784,7 +800,7 @@ void AlgoWorker::onTimeout()
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 CvPoint dest = getPointToMoveAlgo2(i);
-                if(getDistance(dest, cvPoint(localBS.bot[i].x, localBS.bot[i].y)) > 20)
+                if(getDistance(dest, cvPoint(localBS.bot[i].x, localBS.bot[i].y)) > FINAL_REACHED_THRESHOLD)
                 {
                     isFinalPositionReached = false;
                     break;
@@ -966,8 +982,27 @@ void AlgoWorker::onStop()
     myThread->exit();
 }
 
+
+//TODO: WARNING: BYPASSING MUTEX
 void AlgoWorker::moveForward(int n, int speed)
 {
+    cout<<"yoman"<<endl;
+#ifdef SIMULATION
+    CvPoint p1 = cvPoint(localBS.bot[n].x, localBS.bot[n].y);
+    CvPoint p2;
+    p2.x = p1.x + 5.0*cos(localBS.bot[n].angle);
+    p2.y = p1.y + 5.0*sin(localBS.bot[n].angle);
+    if(p2.x < 0)
+        p2.x = 0;
+    if(p2.y < 0)
+        p2.y = 0;
+    if(p2.x > 640)
+        p2.x = 640;
+    if(p2.y > 480)
+        p2.y = 480;
+    localBS.bot[n].x = p2.x;
+    localBS.bot[n].y = p2.y;
+#endif
     if(lastMove[n] == FORWARD)
         return;
     char buffer[200];
@@ -978,6 +1013,22 @@ void AlgoWorker::moveForward(int n, int speed)
 
 void AlgoWorker::moveBack(int n, int speed)
 {
+#ifdef SIMULATION
+    CvPoint p1 = cvPoint(localBS.bot[n].x, localBS.bot[n].y);
+    CvPoint p2;
+    p2.x = p1.x - 5.0*cos(localBS.bot[n].angle);
+    p2.y = p1.y - 5.0*sin(localBS.bot[n].angle);
+    if(p2.x < 0)
+        p2.x = 0;
+    if(p2.y < 0)
+        p2.y = 0;
+    if(p2.x > 640)
+        p2.x = 640;
+    if(p2.y > 480)
+        p2.y = 480;
+    localBS.bot[n].x = p2.x;
+    localBS.bot[n].y = p2.y;
+#endif
     if(lastMove[n] == BACKWARD)
         return;
     char buffer[200];
@@ -989,6 +1040,13 @@ void AlgoWorker::moveBack(int n, int speed)
 
 void AlgoWorker::moveLeft(int n, int speed)
 {
+#ifdef SIMULATION
+    localBS.bot[n].angle -= CV_PI*2.0/180.0;
+    while(localBS.bot[n].angle > 2*CV_PI)
+        localBS.bot[n].angle -= 2*CV_PI;
+    while(localBS.bot[n].angle < 0)
+        localBS.bot[n].angle += 2*CV_PI;
+#endif
     if(lastMove[n] == LEFT)
         return;
     char buffer[200];
@@ -999,6 +1057,15 @@ void AlgoWorker::moveLeft(int n, int speed)
 
 void AlgoWorker::moveRight(int n, int speed)
 {
+#ifdef SIMULATION
+
+    localBS.bot[n].angle += CV_PI*2.0/180.0;
+    while(localBS.bot[n].angle > 2*CV_PI)
+        localBS.bot[n].angle -= 2*CV_PI;
+    while(localBS.bot[n].angle < 0)
+        localBS.bot[n].angle += 2*CV_PI;
+
+#endif
     if(lastMove[n] == RIGHT)
         return;
     char buffer[200];

@@ -46,6 +46,8 @@ public:
     FeatureDetection(CamCapture &cam);
     void getBlobs(CamCapture &cam);
     void updateBeliefState(CamCapture &cam);
+    void printBotSimulation(CamCapture *cam, BeliefState bs);
+    void initBSSimulation();
     static inline double getDistance(CvPoint a, CvPoint b)
     {
         return sqrt((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y));

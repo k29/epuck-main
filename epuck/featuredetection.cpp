@@ -326,3 +326,36 @@ void FeatureDetection::updateBeliefState(CamCapture &cam)
     }
 
 }
+
+void FeatureDetection::initBSSimulation()
+{
+    for(int i = 0; i < NUMBOTS; ++i)
+    {
+        bs.bot[i].isVisible = true;
+        bs.bot[i].x = i*10 + 50;
+        bs.bot[i].y = i*10 + 50;
+        bs.bot[i].angle = CV_PI;
+    }
+}
+
+
+//TODO: remove this copying of code
+void FeatureDetection::printBotSimulation(CamCapture* cam, BeliefState bs)
+{
+    for(int num = 0; num < NUMBOTS; ++num)
+    {
+        cvCircle(cam->rgbimg, cvPoint(bs.bot[num].x, bs.bot[num].y), 5, cvScalar(255, 0, 0));
+        CvPoint p1 = cvPoint(bs.bot[num].x, bs.bot[num].y);
+        CvPoint p2;
+        p2.x = p1.x + 30.0*cos(bs.bot[num].angle);
+        p2.y = p1.y + 30.0*sin(bs.bot[num].angle);
+        char buf[20];
+        sprintf(buf, "%d", num);
+        CvFont font;
+        cvInitFont(&font, CV_FONT_HERSHEY_PLAIN, 1, 1);
+        cvLine(cam->rgbimg, p1, p2, cvScalar(50,50,50), 3);
+        cvPutText(cam->rgbimg, buf, cvPoint(p1.x, p1.y - 20), &font, cvScalar(0,0,0));
+        cvPutText(cam->rgbimg, buf, cvPoint(p1.x-1, p1.y - 21), &font, cvScalar(0,255,255));
+        cvCircle(cam->rgbimg, p1, 3, cvScalar(255, 255, 255), 2);
+    }
+}
