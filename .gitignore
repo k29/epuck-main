@@ -1,2 +1,5 @@
 *.lut
 *.o
+*.pro.user
+epuck/epuck
+trial1/trial1

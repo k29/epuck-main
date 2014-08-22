@@ -28,7 +28,7 @@ void CameraWorker::process()
     cc = new CamCapture(true);//, "../pic-2.jpg");
 #endif
 #ifdef SIMULATION
-    cc = new CamCapture(true, "./test.png");
+    cc = new CamCapture(false, "./test.png");
 #endif
     cc->init(CAMNUM);
     fd = new FeatureDetection(*cc);
