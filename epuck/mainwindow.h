@@ -45,7 +45,6 @@ private:
 signals:
     void stopCamThread();
     void stopAlgoThread();
-    void startAlgo();
     void stopAlgo();
 };
 

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Sat Aug 23 01:19:07 2014
+** Created: Tue Aug 26 16:27:59 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,31 +23,30 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       3,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x05,
       28,   11,   11,   11, 0x05,
       45,   11,   11,   11, 0x05,
-      57,   11,   11,   11, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-      71,   68,   11,   11, 0x08,
-      97,   11,   11,   11, 0x08,
-     126,   11,   11,   11, 0x08,
+      59,   56,   11,   11, 0x08,
+      85,   11,   11,   11, 0x08,
+     114,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0stopCamThread()\0"
-    "stopAlgoThread()\0startAlgo()\0stopAlgo()\0"
-    "pm\0onCamImageReady(QPixmap*)\0"
+    "stopAlgoThread()\0stopAlgo()\0pm\0"
+    "onCamImageReady(QPixmap*)\0"
     "on_algoStartButton_clicked()\0"
     "on_algoStopButton_clicked()\0"
 };
@@ -60,11 +59,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->stopCamThread(); break;
         case 1: _t->stopAlgoThread(); break;
-        case 2: _t->startAlgo(); break;
-        case 3: _t->stopAlgo(); break;
-        case 4: _t->onCamImageReady((*reinterpret_cast< QPixmap*(*)>(_a[1]))); break;
-        case 5: _t->on_algoStartButton_clicked(); break;
-        case 6: _t->on_algoStopButton_clicked(); break;
+        case 2: _t->stopAlgo(); break;
+        case 3: _t->onCamImageReady((*reinterpret_cast< QPixmap*(*)>(_a[1]))); break;
+        case 4: _t->on_algoStartButton_clicked(); break;
+        case 5: _t->on_algoStopButton_clicked(); break;
         default: ;
         }
     }
@@ -102,9 +100,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 6;
     }
     return _id;
 }
@@ -122,14 +120,8 @@ void MainWindow::stopAlgoThread()
 }
 
 // SIGNAL 2
-void MainWindow::startAlgo()
-{
-    QMetaObject::activate(this, &staticMetaObject, 2, 0);
-}
-
-// SIGNAL 3
 void MainWindow::stopAlgo()
 {
-    QMetaObject::activate(this, &staticMetaObject, 3, 0);
+    QMetaObject::activate(this, &staticMetaObject, 2, 0);
 }
 QT_END_MOC_NAMESPACE

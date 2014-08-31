@@ -37,7 +37,7 @@ void AlgoWorker::process()
     frameCounter = 0;
     isRunning = false;
     currentState = SAVE_CURRENT_POSITION;
-    currentAlgo = PROBABILISTIC_0;
+    currentAlgo = NEW_ALGO;
     robotActive = 0;
     for(int i = 0; i < NUMBOTS; ++i)
     {
@@ -334,39 +334,6 @@ CvPoint AlgoWorker::getMidPoint(CvPoint p1, CvPoint p2)
     return ans;
 }
 
-CvPoint AlgoWorker::getLeftNeighbourPoint(int n)
-{
-    double refX = localBS.bot[n].x;
-    int botNum = 0;
-    double x = -9999;
-    for(int i = 0; i < NUMBOTS; ++i)
-    {
-        if(localBS.bot[i].x > x && localBS.bot[i].x < refX && i!=n)
-        {
-            botNum = i;
-            x = localBS.bot[i].x;
-        }
-    }
-    CvPoint ans = cvPoint(localBS.bot[botNum].x, localBS.bot[botNum].y);
-    return ans;
-}
-
-CvPoint AlgoWorker::getRightNeighbourPoint(int n)
-{
-    double refX = localBS.bot[n].x;
-    int botNum = 0;
-    double x = 9999;
-    for(int i = 0; i < NUMBOTS; ++i)
-    {
-        if(localBS.bot[i].x < x && localBS.bot[i].x > refX && i!=n)
-        {
-            botNum = i;
-            x = localBS.bot[i].x;
-        }
-    }
-    CvPoint ans = cvPoint(localBS.bot[botNum].x, localBS.bot[botNum].y);
-    return ans;
-}
 
 
 CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
@@ -460,7 +427,7 @@ CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
 }
 
 
-CvPoint AlgoWorker::getPointToMoveAlgo2(int n)
+CvPoint AlgoWorker::getMidOfNeighbours(int n)
 {
     double refAngle;
     double angle[NUMBOTS];
@@ -655,6 +622,205 @@ void AlgoWorker::getNeighbourIndicesCircle(int n, int* indexList)
     return;
 }
 
+
+//int AlgoWorker::getLeftNeighbourIndex(int n)
+//{
+//    return 0;
+//}
+
+int AlgoWorker::getCWNeighbour(int n)
+{
+    int idList[2];
+    getNeighbourIndicesCircle(n, idList);
+    return idList[1];
+}
+
+int AlgoWorker::getCCWNeighbour(int n)
+{
+    int idList[2];
+    getNeighbourIndicesCircle(n, idList);
+    return idList[0];
+}
+
+bool AlgoWorker::isAngleReachable(int n, double angle)
+{
+    double angleCCW = pointToAngle(getCCWNeighbour(n));
+    double angleCW = pointToAngle(getCWNeighbour(n));
+
+    if(angleCCW < angleCW) //normal case, not passing through 0
+    {
+        if(angle > angleCCW && angle < angleCW)
+            return true;
+        else
+            return false;
+    }
+    else
+    {
+        //passing through 0
+        if(angle > angleCCW || angle < angleCW)
+            return true;
+        else
+            return false;
+    }
+}
+
+
+bool AlgoWorker::isOneStableCCW(int n)
+{
+    double angle1 = 2*pointToAngle(getCCWNeighbour(n)) - pointToAngle(getCCWNeighbour(getCCWNeighbour(n)));
+    while(angle1 < 0)
+        angle1 += 2*CV_PI;
+    while(angle1 > 2*CV_PI)
+        angle1 -= 2*CV_PI;
+    CvPoint p1 = angleToPoint(angle1);
+    if(getDistance(p1, cvPoint(localBS.bot[n].x, localBS.bot[n].y)) < 20)
+        return true;
+    else
+        return false;
+}
+
+bool AlgoWorker::isOneStableCW(int n)
+{
+    double angle1 = 2*pointToAngle(getCWNeighbour(n)) - pointToAngle(getCWNeighbour(getCWNeighbour(n)));
+    while(angle1 < 0)
+        angle1 += 2*CV_PI;
+    while(angle1 > 2*CV_PI)
+        angle1 -= 2*CV_PI;
+    CvPoint p1 = angleToPoint(angle1);
+    if(getDistance(p1, cvPoint(localBS.bot[n].x, localBS.bot[n].y)) < 20)
+        return true;
+    else
+        return false;
+}
+
+CvPoint AlgoWorker::getClosest(CvPoint p1, CvPoint p2, int n)
+{
+    CvPoint p = cvPoint(localBS.bot[n].x, localBS.bot[n].y);
+    if(getDistance(p, p1) < getDistance(p, p2))
+        return p1;
+    else
+        return p2;
+}
+
+CvPoint AlgoWorker::getPointNewAlgo(int n)
+{
+/**************
+If robot is in no stable state
+  - It checks if it can make two stable configuration with its neighbors.
+    - If YES, then it does that
+  - If the robot can't make two stable configuration then it sees that if it can
+    make one stable configuration with its neighbors
+     - If NO then the robot stays silent and relinquishes the chance to its neighbors
+     - If YES then the robot has to decide if it should make one stable config. with its
+       clockwise or anti-clockwise neighbor
+       - Three cases
+         (a) both the neighbors are one stable
+             - then make one stable config. with the one which is at minimum angular distance
+         (b) both no stable
+             - then make one stable config. with the one which is at minimum angular distance
+         (c) one of them is one stable
+             - then make one stable config. with this robot so that it becomes two stable
+************/
+
+    //angle increases clockwise!
+    //check if 2-stable possible
+    double angle1 = 2*pointToAngle(getCCWNeighbour(n)) - pointToAngle(getCCWNeighbour(getCCWNeighbour(n)));
+    while(angle1 < 0)
+        angle1 += 2*CV_PI;
+    while(angle1 > 2*CV_PI)
+        angle1 -= 2*CV_PI;
+    double angle2 = 2*pointToAngle(getCWNeighbour(n)) - pointToAngle(getCWNeighbour(getCWNeighbour(n)));
+    while(angle2 < 0)
+        angle2 += 2*CV_PI;
+    while(angle2 > 2*CV_PI)
+        angle2 -= 2*CV_PI;
+    CvPoint p1, p2;
+    p1 = angleToPoint(angle1);
+    p2 = angleToPoint(angle2);
+    if(getDistance(p1, p2) < 20)
+    {
+        cout<< "Index " << n << " can be 2 balanced" << endl;
+        return p2;
+    }
+    else
+    {
+        //2 stable not possible, see if 1 stable possible?
+        //ie check if either of angle1 or angle2 is reachable
+        int numReachable = 0;
+        if(isAngleReachable(n, angle1))
+            numReachable++;
+        if(isAngleReachable(n, angle2))
+            numReachable++;
+        if(numReachable == 0)
+            return cvPoint(localBS.bot[n].x, localBS.bot[n].y);
+
+        if(numReachable == 1)
+        {
+            cout << "Only one reachable for " << n << endl;
+            if(isAngleReachable(n, angle1))
+                return p1;
+            else
+                return p2;
+        }
+        else
+        {
+            cout << "Both reachable!" << endl;
+//            return p1;
+            int numOneStable = 0;
+            //checking one-stability of ccw neighbour
+            if(isOneStableCCW(getCCWNeighbour(n)))
+                numOneStable++;
+            if(isOneStableCW(getCWNeighbour(n)))
+                numOneStable++;
+            if(numOneStable == 0)
+            {
+                cout << "One stable was zero for " << n << endl;
+                return getClosest(p1, p2, n);
+            }
+            else if(numOneStable == 1)
+            {
+                cout << "One stable was ONE for " << n << endl;
+                if(isOneStableCCW(getCCWNeighbour(n)))
+                    return p1;
+                else
+                    return p2;
+            }
+            else
+            {
+                //numOneStable is 2
+                return getClosest(p1, p2, n);
+            }
+
+        }
+    }
+
+
+}
+
+
+CvPoint AlgoWorker::angleToPoint(double angle)
+{
+    CvPoint p;
+    p.x = destinationCircle.centre.x + cos(angle)*destinationCircle.radius;
+    p.y = destinationCircle.centre.y + sin(angle)*destinationCircle.radius;
+    return p;
+}
+
+double AlgoWorker::pointToAngle(CvPoint p)
+{
+    double angle = atan2(p.y - destinationCircle.centre.y, p.x - destinationCircle.centre.x);
+    if(angle < 0)
+    {
+        angle += 2*CV_PI;
+    }
+    return angle;
+}
+
+double AlgoWorker::pointToAngle(int n)
+{
+    return pointToAngle(cvPoint(localBS.bot[n].x, localBS.bot[n].y));
+}
+
 void AlgoWorker::onTimeout()
 {
     bool isBSAvailable = false;
@@ -690,7 +856,7 @@ void AlgoWorker::onTimeout()
     }
 //    qDebug() << "Y222OOOOOOOOOOO";
 //    qDebug() << avail3;
-    if(allBotVisible == NUMBOTS && isBSAvailable)
+    if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
     {
 //        qDebug() << "YOOOOOOOOOOO\n";
 
@@ -799,7 +965,7 @@ void AlgoWorker::onTimeout()
             bool isFinalPositionReached = true;
             for(int i = 0; i < NUMBOTS; ++i)
             {
-                CvPoint dest = getPointToMoveAlgo2(i);
+                CvPoint dest = getMidOfNeighbours(i);
                 if(getDistance(dest, cvPoint(localBS.bot[i].x, localBS.bot[i].y)) > FINAL_REACHED_THRESHOLD)
                 {
                     isFinalPositionReached = false;
@@ -839,7 +1005,16 @@ void AlgoWorker::onTimeout()
                         isBotMoving[i] = false;
 
                 }
-                destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
+                if(currentAlgo == NEW_ALGO)
+                {
+                    destinationPoint[robotActive] = getPointNewAlgo(robotActive);
+//                    destinationPoint[robotActive] = cvPoint(localBS.bot[robotActive].x, localBS.bot[robotActive].y);
+//                    int idlist[2];
+//                    getNeighbourIndicesCircle(robotActive, idlist);
+//                    cout << "for " << robotActive << " angle is " << pointToAngle(robotActive)<<endl;
+                }
+                else
+                    destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
                 isBotMoving[robotActive] = true;
             }
             else if(currentAlgo == DINING_PHILOSOPHER)
@@ -854,7 +1029,7 @@ void AlgoWorker::onTimeout()
 
                 state[robotActive] = 1;
                 isBotMoving[robotActive] = true;
-                destinationPoint[robotActive] = getPointToMoveAlgo2(robotActive);
+                destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
 
                 for(int i = 0; i < NUMBOTS; ++i)
                 {
@@ -871,7 +1046,7 @@ void AlgoWorker::onTimeout()
                         {
                             state[i] = 1;
                             isBotMoving[i] = true;
-                            destinationPoint[i] = getPointToMoveAlgo2(i);
+                            destinationPoint[i] = getMidOfNeighbours(i);
                         }
                     }
                 }
@@ -956,7 +1131,7 @@ void AlgoWorker::onTimeout()
 //    usleep(100000);
 //    qDebug()<< "starting next iteration";
     timer->setSingleShot(true);
-    timer->start(10);
+    timer->start(100);
 //    nextIteration();
 }
 
@@ -983,10 +1158,9 @@ void AlgoWorker::onStop()
 }
 
 
-//TODO: WARNING: BYPASSING MUTEX
 void AlgoWorker::moveForward(int n, int speed)
 {
-    cout<<"yoman"<<endl;
+//    cout<<"yoman"<<endl;
 #ifdef SIMULATION
     CvPoint p1 = cvPoint(localBS.bot[n].x, localBS.bot[n].y);
     CvPoint p2;
@@ -1003,12 +1177,14 @@ void AlgoWorker::moveForward(int n, int speed)
     localBS.bot[n].x = p2.x;
     localBS.bot[n].y = p2.y;
 #endif
+#ifndef SIMULATION
     if(lastMove[n] == FORWARD)
         return;
     char buffer[200];
     sprintf(buffer, "d,%d,%d", speed, speed);
     s[n].WriteString(std::string(buffer));
     lastMove[n] = FORWARD;
+#endif
 }
 
 void AlgoWorker::moveBack(int n, int speed)
@@ -1029,6 +1205,7 @@ void AlgoWorker::moveBack(int n, int speed)
     localBS.bot[n].x = p2.x;
     localBS.bot[n].y = p2.y;
 #endif
+#ifndef SIMULATION
     if(lastMove[n] == BACKWARD)
         return;
     char buffer[200];
@@ -1036,6 +1213,7 @@ void AlgoWorker::moveBack(int n, int speed)
     sprintf(buffer, "d,%d,%d", speed, speed);
     s[n].WriteString(std::string(buffer));
     lastMove[n] = BACKWARD;
+#endif
 }
 
 void AlgoWorker::moveLeft(int n, int speed)
@@ -1047,12 +1225,14 @@ void AlgoWorker::moveLeft(int n, int speed)
     while(localBS.bot[n].angle < 0)
         localBS.bot[n].angle += 2*CV_PI;
 #endif
+#ifndef SIMULATION
     if(lastMove[n] == LEFT)
         return;
     char buffer[200];
     sprintf(buffer, "d,-%d,%d", speed, speed);
     s[n].WriteString(std::string(buffer));
     lastMove[n] = LEFT;
+#endif
 }
 
 void AlgoWorker::moveRight(int n, int speed)
@@ -1066,12 +1246,14 @@ void AlgoWorker::moveRight(int n, int speed)
         localBS.bot[n].angle += 2*CV_PI;
 
 #endif
+#ifndef SIMULATION
     if(lastMove[n] == RIGHT)
         return;
     char buffer[200];
     sprintf(buffer, "d,%d,-%d", speed, speed);
     s[n].WriteString(std::string(buffer));
     lastMove[n] = RIGHT;
+#endif
 }
 
 void AlgoWorker::moveStop(int n)
@@ -1091,17 +1273,13 @@ void AlgoWorker::moveStopAll()
 }
 
 
-void AlgoWorker::onStartAlgo()
-{
-    qDebug() << "Starting/Resuming algorithm";
-    isRunning = true;
-    nextIteration();
-}
-
 void AlgoWorker::onStopAlgo()
 {
-    qDebug() << "Pausing algorithm";
-    isRunning = false;
+    qDebug() << "Start/stop algorithm";
+    if(isRunning == true)
+        isRunning = false;
+    else
+        isRunning = true;
 
     //add code for stopping all robots
     moveStopAll();
@@ -1109,10 +1287,14 @@ void AlgoWorker::onStopAlgo()
 
 void AlgoWorker::turnLedOn(int n)
 {
+#ifndef SIMULATION
     s[n].WriteString(std::string("b,1"));
+#endif
 }
 
 void AlgoWorker::turnLedOff(int n)
 {
+#ifndef SIMULATION
     s[n].WriteString(std::string("b,0"));
+#endif
 }

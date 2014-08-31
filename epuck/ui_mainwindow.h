@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Tue Aug 12 17:47:20 2014
+** Created: Tue Aug 26 16:29:57 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -58,8 +58,8 @@ public:
     QLabel *botLabel_5;
     QComboBox *botColor_5;
     QComboBox *botSerial_5;
-    QPushButton *algoStartButton;
     QPushButton *algoStopButton;
+    QPushButton *algoStartButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -202,12 +202,13 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_5);
 
-        algoStartButton = new QPushButton(centralWidget);
-        algoStartButton->setObjectName(QString::fromUtf8("algoStartButton"));
-        algoStartButton->setGeometry(QRect(690, 260, 98, 27));
         algoStopButton = new QPushButton(centralWidget);
         algoStopButton->setObjectName(QString::fromUtf8("algoStopButton"));
-        algoStopButton->setGeometry(QRect(830, 260, 98, 27));
+        algoStopButton->setGeometry(QRect(760, 270, 98, 27));
+        algoStartButton = new QPushButton(centralWidget);
+        algoStartButton->setObjectName(QString::fromUtf8("algoStartButton"));
+        algoStartButton->setEnabled(false);
+        algoStartButton->setGeometry(QRect(730, 320, 98, 27));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -233,17 +234,12 @@ public:
         FPS->setText(QApplication::translate("MainWindow", "FPS:", 0, QApplication::UnicodeUTF8));
         configHeadingLabel->setText(QApplication::translate("MainWindow", "epuck configuration", 0, QApplication::UnicodeUTF8));
         botLabel->setText(QApplication::translate("MainWindow", "epuck 1", 0, QApplication::UnicodeUTF8));
-        botColor->clear();
-        botColor->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "red", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "blue", 0, QApplication::UnicodeUTF8)
-        );
         botLabel_2->setText(QApplication::translate("MainWindow", "epuck 2", 0, QApplication::UnicodeUTF8));
         botLabel_3->setText(QApplication::translate("MainWindow", "epuck 3", 0, QApplication::UnicodeUTF8));
         botLabel_4->setText(QApplication::translate("MainWindow", "epuck 4", 0, QApplication::UnicodeUTF8));
         botLabel_5->setText(QApplication::translate("MainWindow", "epuck 5", 0, QApplication::UnicodeUTF8));
-        algoStartButton->setText(QApplication::translate("MainWindow", "Start", 0, QApplication::UnicodeUTF8));
-        algoStopButton->setText(QApplication::translate("MainWindow", "Pause", 0, QApplication::UnicodeUTF8));
+        algoStopButton->setText(QApplication::translate("MainWindow", "Start/Pause", 0, QApplication::UnicodeUTF8));
+        algoStartButton->setText(QString());
     } // retranslateUi
 
 };

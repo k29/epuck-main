@@ -28,7 +28,7 @@
 #define FINAL_REACHED_THRESHOLD 18.0
 
 enum AlgoState {SAVE_CURRENT_POSITION, MOVE_TO_SAVED_POSITION,GETTING_LINE_POINTS, MOVING_TO_LINE, ORIENTING, POSITIONING, MAKE_CIRCLE, MOVE_TO_CIRCLE, POSITIONING_ON_CIRCLE_1, POSITIONING_ON_CIRCLE_2, FINISHED};
-enum Algorithm {PROBABILISTIC_0, PROBABILISTIC_1, PROBABILISTIC_HALF, DINING_PHILOSOPHER};
+enum Algorithm {PROBABILISTIC_0, PROBABILISTIC_1, PROBABILISTIC_HALF, DINING_PHILOSOPHER, NEW_ALGO};
 enum MoveDirection {FORWARD, BACKWARD, LEFT, RIGHT, STOP};
 class AlgoWorker : public QObject
 {
@@ -39,7 +39,6 @@ public slots:
     void process();
     void onTimeout();
     void onStop();
-    void onStartAlgo();
     void onStopAlgo();
 signals:
     void gotLine(int x1, int y1, int x2, int y2);
@@ -91,13 +90,21 @@ private:
     CvPoint getPerpendicularPoint(int n);
     CvPoint getPerpendicularPoint(CvPoint p);
     CvPoint getMidPoint(CvPoint p1, CvPoint p2);
-    CvPoint getLeftNeighbourPoint(int n);
-    CvPoint getRightNeighbourPoint(int n);
+    int getCCWNeighbour(int n);
+    int getCWNeighbour(int n);
     CvPoint getPerpPointOnCircle(int n);
     CvPoint getPerpPointOnCircle(CvPoint p, bool closer = true);
     CvPoint getPointToMoveAlgo1(int n);
     CvPoint getPerpPointOnCircleCloserToBot(CvPoint p, int n);
-    CvPoint getPointToMoveAlgo2(int n);
+    CvPoint getMidOfNeighbours(int n);
+    CvPoint getPointNewAlgo(int n);
+    double pointToAngle(CvPoint p);
+    double pointToAngle(int n);
+    CvPoint angleToPoint(double angle);
+    bool isAngleReachable(int n, double angle);
+    bool isOneStableCCW(int n);
+    bool isOneStableCW(int n);
+    CvPoint getClosest(CvPoint p1, CvPoint p2, int n);
     void getNeighbourIndicesCircle(int n, int* indexList);
 };
 

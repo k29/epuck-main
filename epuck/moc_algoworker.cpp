@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'algoworker.h'
 **
-** Created: Sat Aug 23 01:19:11 2014
+** Created: Tue Aug 26 16:28:01 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_AlgoWorker[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -42,7 +42,6 @@ static const uint qt_meta_data_AlgoWorker[] = {
      141,   11,   11,   11, 0x0a,
      153,   11,   11,   11, 0x0a,
      162,   11,   11,   11, 0x0a,
-     176,   11,   11,   11, 0x0a,
 
        0        // eod
 };
@@ -53,7 +52,7 @@ static const char qt_meta_stringdata_AlgoWorker[] = {
     "printDestination(PointList)\0c\0"
     "printCircle(Circle)\0finished()\0err\0"
     "error(QString)\0process()\0onTimeout()\0"
-    "onStop()\0onStartAlgo()\0onStopAlgo()\0"
+    "onStop()\0onStopAlgo()\0"
 };
 
 void AlgoWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -70,8 +69,7 @@ void AlgoWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 5: _t->process(); break;
         case 6: _t->onTimeout(); break;
         case 7: _t->onStop(); break;
-        case 8: _t->onStartAlgo(); break;
-        case 9: _t->onStopAlgo(); break;
+        case 8: _t->onStopAlgo(); break;
         default: ;
         }
     }
@@ -109,9 +107,9 @@ int AlgoWorker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 9;
     }
     return _id;
 }

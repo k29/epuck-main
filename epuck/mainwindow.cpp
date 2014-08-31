@@ -44,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, SIGNAL(stopAlgoThread()), aw, SLOT(onStop()));
 
-    connect(this, SIGNAL(startAlgo()), aw, SLOT(onStartAlgo()));
     connect(this, SIGNAL(stopAlgo()), aw, SLOT(onStopAlgo()));
 
     algoThread->start(QThread::TimeCriticalPriority);
@@ -89,12 +88,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_algoStartButton_clicked()
-{
-    emit startAlgo();
-}
 
 void MainWindow::on_algoStopButton_clicked()
 {
     emit stopAlgo();
+}
+
+void MainWindow::on_algoStartButton_clicked()
+{
+
 }
