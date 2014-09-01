@@ -36,3 +36,4 @@ HEADERS  += mainwindow.h \
     algoworker.h
 
 FORMS    += mainwindow.ui
+

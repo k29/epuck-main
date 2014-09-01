@@ -724,77 +724,69 @@ If robot is in no stable state
 
     //angle increases clockwise!
     //check if 2-stable possible
-    double angle1 = 2*pointToAngle(getCCWNeighbour(n)) - pointToAngle(getCCWNeighbour(getCCWNeighbour(n)));
+    const double stableAngle = 2.0*CV_PI/((double)NUMBOTS);
+    double angle = pointToAngle(getCWNeighbour(n)) - pointToAngle(getCCWNeighbour(n));
+    while(angle < 0)
+        angle += 2*CV_PI;
+    while(angle > 2*CV_PI)
+        angle -= 2*CV_PI;
+
+    if(fabs(angle/2.0 - stableAngle) < ANGLE_THRESHOLD_FINE)
+    {
+        //2-stable possible
+        qDebug() << "2 stable possible!";
+        return getMidOfNeighbours(n);
+    }
+
+    //check if 1-stable possible
+
+    if(angle < stableAngle)
+    {
+        qDebug() << "1-stable not possible!";
+        return cvPoint(localBS.bot[n].x, localBS.bot[n].y);
+    }
+
+    //1-stable is possible
+    //check if any neighbour is 1-stable
+    //if either is, move to its corresponding point,
+    //else move to CCW one
+
+    double angle1 = pointToAngle(getCCWNeighbour(n)) - pointToAngle(getCCWNeighbour(getCCWNeighbour(n)));
     while(angle1 < 0)
         angle1 += 2*CV_PI;
     while(angle1 > 2*CV_PI)
         angle1 -= 2*CV_PI;
-    double angle2 = 2*pointToAngle(getCWNeighbour(n)) - pointToAngle(getCWNeighbour(getCWNeighbour(n)));
+
+    double angle2 = pointToAngle(getCWNeighbour(getCWNeighbour(n))) - pointToAngle(getCWNeighbour(n));
     while(angle2 < 0)
         angle2 += 2*CV_PI;
     while(angle2 > 2*CV_PI)
         angle2 -= 2*CV_PI;
-    CvPoint p1, p2;
-    p1 = angleToPoint(angle1);
-    p2 = angleToPoint(angle2);
-    if(getDistance(p1, p2) < 20)
+
+    if((fabs(angle1 - stableAngle) < ANGLE_THRESHOLD_FINE && fabs(angle2 - stableAngle) < ANGLE_THRESHOLD_FINE) ||
+       (fabs(angle1 - stableAngle) > ANGLE_THRESHOLD_FINE && fabs(angle2 - stableAngle) > ANGLE_THRESHOLD_FINE) )
     {
-        cout<< "Index " << n << " can be 2 balanced" << endl;
-        return p2;
+        //choose closer one
+        CvPoint p1 = angleToPoint(pointToAngle(getCCWNeighbour(n)) + stableAngle);
+        CvPoint p2 = angleToPoint(pointToAngle(getCWNeighbour(n)) - stableAngle);
+        CvPoint bot = cvPoint(localBS.bot[n].x, localBS.bot[n].y);
+        if(getDistance(bot, p1) < getDistance(bot, p2))
+            return p1;
+        else
+            return p2;
     }
     else
     {
-        //2 stable not possible, see if 1 stable possible?
-        //ie check if either of angle1 or angle2 is reachable
-        int numReachable = 0;
-        if(isAngleReachable(n, angle1))
-            numReachable++;
-        if(isAngleReachable(n, angle2))
-            numReachable++;
-        if(numReachable == 0)
-            return cvPoint(localBS.bot[n].x, localBS.bot[n].y);
 
-        if(numReachable == 1)
+        if(fabs(angle1 - stableAngle) < ANGLE_THRESHOLD_FINE)
         {
-            cout << "Only one reachable for " << n << endl;
-            if(isAngleReachable(n, angle1))
-                return p1;
-            else
-                return p2;
+            return angleToPoint(pointToAngle(getCCWNeighbour(n)) + stableAngle);
         }
         else
         {
-            cout << "Both reachable!" << endl;
-//            return p1;
-            int numOneStable = 0;
-            //checking one-stability of ccw neighbour
-            if(isOneStableCCW(getCCWNeighbour(n)))
-                numOneStable++;
-            if(isOneStableCW(getCWNeighbour(n)))
-                numOneStable++;
-            if(numOneStable == 0)
-            {
-                cout << "One stable was zero for " << n << endl;
-                return getClosest(p1, p2, n);
-            }
-            else if(numOneStable == 1)
-            {
-                cout << "One stable was ONE for " << n << endl;
-                if(isOneStableCCW(getCCWNeighbour(n)))
-                    return p1;
-                else
-                    return p2;
-            }
-            else
-            {
-                //numOneStable is 2
-                return getClosest(p1, p2, n);
-            }
-
+            return angleToPoint(pointToAngle(getCWNeighbour(n)) - stableAngle);
         }
     }
-
-
 }
 
 
@@ -1131,7 +1123,7 @@ void AlgoWorker::onTimeout()
 //    usleep(100000);
 //    qDebug()<< "starting next iteration";
     timer->setSingleShot(true);
-    timer->start(100);
+    timer->start(10);
 //    nextIteration();
 }
 
