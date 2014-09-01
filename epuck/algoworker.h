@@ -28,7 +28,8 @@
 #define FINAL_REACHED_THRESHOLD 18.0
 
 enum AlgoState {SAVE_CURRENT_POSITION, MOVE_TO_SAVED_POSITION, MAKE_CIRCLE, MOVE_TO_CIRCLE, POSITIONING_ON_CIRCLE_1, POSITIONING_ON_CIRCLE_2, FINISHED};
-enum Algorithm {PROBABILISTIC_0, PROBABILISTIC_1, PROBABILISTIC_HALF, DINING_PHILOSOPHER, NEW_ALGO};
+enum Algorithm {MIDPOINT, NEW_ALGO};
+enum ActivationAlgorithm {PROBABILISTIC_0, PROBABILISTIC_1, PROBABILISTIC_HALF, DINING_PHILOSOPHER};
 enum MoveDirection {FORWARD, BACKWARD, LEFT, RIGHT, STOP};
 class AlgoWorker : public QObject
 {
@@ -58,6 +59,7 @@ private:
     BeliefState localBS;
     AlgoState currentState;
     Algorithm currentAlgo;
+    ActivationAlgorithm currentActivationAlgo;
     int line_x1, line_x2, line_y1, line_y2;
     void moveLeft(int n, int speed = 150);
     void moveRight(int n, int speed = 150);

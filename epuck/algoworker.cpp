@@ -37,7 +37,8 @@ void AlgoWorker::process()
     frameCounter = 0;
     isRunning = false;
     currentState = SAVE_CURRENT_POSITION;
-    currentAlgo = NEW_ALGO;
+    currentAlgo = MIDPOINT;
+    currentActivationAlgo = DINING_PHILOSOPHER;
     robotActive = 0;
     for(int i = 0; i < NUMBOTS; ++i)
     {
@@ -973,11 +974,11 @@ void AlgoWorker::onTimeout()
                 currentState = FINISHED;
                 break;
             }
-            if(currentAlgo != DINING_PHILOSOPHER)
+            if(currentActivationAlgo != DINING_PHILOSOPHER)
             {
                 for(int i = 0; i < NUMBOTS; i++)
                 {
-                    if(currentAlgo == PROBABILISTIC_HALF)
+                    if(currentActivationAlgo == PROBABILISTIC_HALF)
                     {
                         if(qrand()%2 == 0)
                         {
@@ -988,7 +989,7 @@ void AlgoWorker::onTimeout()
                         else
                             isBotMoving[i] = false;
                     }
-                    else if(currentAlgo == PROBABILISTIC_1)
+                    else if(currentActivationAlgo == PROBABILISTIC_1)
                     {
                         destinationPoint[i] = getPointToMoveAlgo1(i);
                         isBotMoving[i] = true;
@@ -1009,7 +1010,7 @@ void AlgoWorker::onTimeout()
                     destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
                 isBotMoving[robotActive] = true;
             }
-            else if(currentAlgo == DINING_PHILOSOPHER)
+            else if(currentActivationAlgo == DINING_PHILOSOPHER)
             {
                 int state[NUMBOTS];
                 for(int i = 0; i < NUMBOTS; ++i)
@@ -1021,7 +1022,10 @@ void AlgoWorker::onTimeout()
 
                 state[robotActive] = 1;
                 isBotMoving[robotActive] = true;
-                destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
+                if(currentAlgo == NEW_ALGO)
+                    destinationPoint[robotActive] = getPointNewAlgo(robotActive);
+                else if(currentAlgo == MIDPOINT)
+                    destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
 
                 for(int i = 0; i < NUMBOTS; ++i)
                 {
@@ -1038,7 +1042,10 @@ void AlgoWorker::onTimeout()
                         {
                             state[i] = 1;
                             isBotMoving[i] = true;
-                            destinationPoint[i] = getMidOfNeighbours(i);
+                            if(currentAlgo == NEW_ALGO)
+                                destinationPoint[i] = getPointNewAlgo(i);
+                            else if(currentAlgo == MIDPOINT)
+                                destinationPoint[i] = getPointToMoveAlgo1(i);
                         }
                     }
                 }
@@ -1103,7 +1110,7 @@ void AlgoWorker::onTimeout()
              qDebug() << "Number of activations: " << numActivations;
              qDebug() << "Number of rounds: " << numRounds;
              qDebug() << "Total Distance: " << totDistance;
-             sleep(5);
+             sleep(1);
             moveStopAll();
             currentState = MOVE_TO_SAVED_POSITION;
             currentAlgo = (Algorithm) ((int)currentAlgo + 1);
