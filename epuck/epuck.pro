@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     camcapture.cpp \
     featuredetection.cpp \
     beliefstate.cpp \
-    algoworker.cpp
+    algoworker.cpp \
+    hungarian.cpp
 
 HEADERS  += mainwindow.h \
     cameraworker.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     defines.h \
     featuredetection.h \
     beliefstate.h \
-    algoworker.h
+    algoworker.h \
+    hungarian.h
 
 FORMS    += mainwindow.ui
 

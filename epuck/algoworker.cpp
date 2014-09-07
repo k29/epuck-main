@@ -30,6 +30,24 @@ double AlgoWorker::getDistance(CvPoint a, CvPoint b)
 
 void AlgoWorker::process()
 {
+    h.n = 3;
+    int mat[3][3] = {
+        {3, 3, 3},
+        {3, 2, 3},
+        {3, 2, 3}
+    };
+    for(int i = 0; i < 3; ++i)
+    {
+        for(int j = 0; j < 3; ++j)
+        {
+            h.cost[i][j] = mat[i][j];
+        }
+    }
+    qDebug() << "Answer is " << h.hungarian();
+    for(int i = 0; i < 3; ++i)
+    {
+        qDebug() << h.xy[i];
+    }
     // allocate resources using new here
     QTime now = QTime::currentTime();
     qsrand(now.msec());
@@ -920,7 +938,10 @@ void AlgoWorker::onTimeout()
             emit printDestination(temp);
 //            sleep(10);
 //            usleep(2000000);
-            currentState = MOVE_TO_CIRCLE;
+            if(currentAlgo == LYNDON)
+                currentState = CALCULATE_POINTS_HUNGARIAN;
+            else
+                currentState = MOVE_TO_CIRCLE;
             for(int i = 0; i<NUMBOTS; ++i)
             {
                 turnLedOff(i);
@@ -1093,7 +1114,14 @@ void AlgoWorker::onTimeout()
                     }
                 }
             }
-            if(count == numBotMoving)
+            if(currentAlgo == LYNDON)
+            {
+                if(count == NUMBOTS)
+                {
+                    currentState = FINISHED;
+                }
+            }
+            else if(count == numBotMoving)
             {
 //                qDebug() << "inside";
                 robotActive++;
@@ -1105,6 +1133,48 @@ void AlgoWorker::onTimeout()
         }
         break;
 
+        case CALCULATE_POINTS_HUNGARIAN:
+        {
+            h.n = NUMBOTS;
+            //calculate the destination points
+            //assume leader is destinationPoint[0]
+            const double stableAngle = 2.0*CV_PI/((double)NUMBOTS);
+            CvPoint myPoint[5];
+            for(int i = 0; i < NUMBOTS; ++i)
+            {
+                myPoint[i] = angleToPoint(pointToAngle(destinationPoint[0]) + stableAngle*i);
+            }
+
+            PointList temp;
+            for(int i = 0; i < NUMBOTS; ++i)
+            {
+                temp.p[i] = myPoint[i];
+            }
+//            usleep(2000000);
+            emit printDestination(temp);
+
+            //fill cost matrix
+            for(int i = 0; i < NUMBOTS; ++i)
+            {
+                for(int j = 0; j < NUMBOTS; ++j)
+                {
+                    h.cost[i][j] = getDistance(cvPoint(localBS.bot[i].x, localBS.bot[i].y), myPoint[j]);
+                }
+            }
+            totDistance = h.hungarian();
+            for(int i = 0; i < NUMBOTS; ++i)
+            {
+                destinationPoint[i] = myPoint[h.xy[i]];
+                isBotMoving[i] = true;
+            }
+            currentState = POSITIONING_ON_CIRCLE_2;
+        }
+
+        break;
+
+        case MOVE_TO_POINTS:
+
+        break;
         case FINISHED:
 //            qDebug() << "Finished";
              qDebug() << "Number of activations: " << numActivations;
@@ -1113,7 +1183,7 @@ void AlgoWorker::onTimeout()
              sleep(1);
             moveStopAll();
             currentState = MOVE_TO_SAVED_POSITION;
-            currentAlgo = (Algorithm) ((int)currentAlgo + 1);
+            currentAlgo = (Algorithm) (((int)currentAlgo + 1)%((int)END_ALGO));
             break;
 
         }
@@ -1130,7 +1200,7 @@ void AlgoWorker::onTimeout()
 //    usleep(100000);
 //    qDebug()<< "starting next iteration";
     timer->setSingleShot(true);
-    timer->start(10);
+    timer->start(100);
 //    nextIteration();
 }
 

@@ -11,6 +11,7 @@
 #include "camcapture.h"
 #include "featuredetection.h"
 #include "commondefs.h"
+#include "hungarian.h"
 
 
 //non simulation values
@@ -27,8 +28,8 @@
 #define DISTANCE_THRESHOLD_FINE 8.0
 #define FINAL_REACHED_THRESHOLD 18.0
 
-enum AlgoState {SAVE_CURRENT_POSITION, MOVE_TO_SAVED_POSITION, MAKE_CIRCLE, MOVE_TO_CIRCLE, POSITIONING_ON_CIRCLE_1, POSITIONING_ON_CIRCLE_2, FINISHED};
-enum Algorithm {MIDPOINT, NEW_ALGO};
+enum AlgoState {SAVE_CURRENT_POSITION, MOVE_TO_SAVED_POSITION, MAKE_CIRCLE, MOVE_TO_CIRCLE, POSITIONING_ON_CIRCLE_1, POSITIONING_ON_CIRCLE_2, FINISHED, CALCULATE_POINTS_HUNGARIAN, MOVE_TO_POINTS};
+enum Algorithm {MIDPOINT, NEW_ALGO, LYNDON, END_ALGO};
 enum ActivationAlgorithm {PROBABILISTIC_0, PROBABILISTIC_1, PROBABILISTIC_HALF, DINING_PHILOSOPHER};
 enum MoveDirection {FORWARD, BACKWARD, LEFT, RIGHT, STOP};
 class AlgoWorker : public QObject
@@ -108,6 +109,7 @@ private:
     bool isOneStableCW(int n);
     CvPoint getClosest(CvPoint p1, CvPoint p2, int n);
     void getNeighbourIndicesCircle(int n, int* indexList);
+    Hungarian h;
 };
 
 #endif // ALGOWORKER_H
