@@ -4,7 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include "imgproc.h"
 
-// #define CAMCAPTURE_DEBUG
+//#define CAMCAPTURE_DEBUG
 /*
 HOW TO USE THIS CLASS
 1. Make object of class.

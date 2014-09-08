@@ -96,7 +96,7 @@
       <x>840</x>
       <y>480</y>
       <width>145</width>
-      <height>235</height>
+      <height>191</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -120,8 +120,8 @@
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Ubuntu';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -154,7 +154,7 @@ p, li { white-space: pre-wrap; }
       <x>430</x>
       <y>470</y>
       <width>281</width>
-      <height>261</height>
+      <height>211</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -336,7 +336,7 @@ p, li { white-space: pre-wrap; }
       <x>30</x>
       <y>480</y>
       <width>381</width>
-      <height>183</height>
+      <height>290</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -355,26 +355,26 @@ p, li { white-space: pre-wrap; }
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QwtSlider" name="grslidermin">
-           <property name="mass">
+          <widget class="QwtSlider" name="grslidermin" native="true">
+           <property name="mass" stdset="0">
             <double>0.000000000000000</double>
            </property>
-           <property name="borderWidth">
+           <property name="borderWidth" stdset="0">
             <number>2</number>
            </property>
-           <property name="spacing">
+           <property name="spacing" stdset="0">
             <number>2</number>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QwtSlider" name="grslidermax"/>
+          <widget class="QwtSlider" name="grslidermax" native="true"/>
          </item>
          <item>
-          <widget class="QwtSlider" name="brslidermin"/>
+          <widget class="QwtSlider" name="brslidermin" native="true"/>
          </item>
          <item>
-          <widget class="QwtSlider" name="brslidermax"/>
+          <widget class="QwtSlider" name="brslidermax" native="true"/>
          </item>
         </layout>
        </item>
@@ -476,7 +476,7 @@ p, li { white-space: pre-wrap; }
       <x>990</x>
       <y>480</y>
       <width>101</width>
-      <height>239</height>
+      <height>265</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -579,13 +579,13 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>1100</x>
       <y>480</y>
-      <width>99</width>
-      <height>62</height>
+      <width>100</width>
+      <height>70</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -609,11 +609,23 @@ p, li { white-space: pre-wrap; }
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
+   <zorder>layoutWidget</zorder>
    <zorder>mylabel1</zorder>
    <zorder>mylabel2</zorder>
    <zorder>listWidget</zorder>
-   <zorder>pushButton_5</zorder>
-   <zorder>pushButton_6</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_6</zorder>
+   <zorder>vmin</zorder>
+   <zorder>vmax</zorder>
+   <zorder>vminslider</zorder>
+   <zorder>vmaxslider</zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder>label_4</zorder>
+   <zorder></zorder>
+   <zorder></zorder>
+   <zorder>YUV</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -621,7 +633,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1291</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>
@@ -637,134 +649,6 @@ p, li { white-space: pre-wrap; }
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>grmin</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>grslidermin</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>504</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>230</x>
-     <y>497</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>grslidermin</sender>
-   <signal>sliderMoved(double)</signal>
-   <receiver>grmin</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>230</x>
-     <y>497</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>301</x>
-     <y>504</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>grslidermax</sender>
-   <signal>sliderMoved(double)</signal>
-   <receiver>grmax</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>230</x>
-     <y>617</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>301</x>
-     <y>584</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>grmax</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>grslidermax</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>584</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>230</x>
-     <y>617</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>brslidermin</sender>
-   <signal>sliderMoved(double)</signal>
-   <receiver>brmin</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>230</x>
-     <y>698</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>301</x>
-     <y>654</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>brmin</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>brslidermin</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>654</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>230</x>
-     <y>698</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>brslidermax</sender>
-   <signal>sliderMoved(double)</signal>
-   <receiver>brmax</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>230</x>
-     <y>757</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>301</x>
-     <y>714</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>brmax</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>brslidermax</receiver>
-   <slot>setValue(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>714</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>230</x>
-     <y>757</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>yminslider</sender>
    <signal>sliderMoved(int)</signal>
@@ -862,38 +746,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>umaxslider</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>umax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>719</x>
-     <y>616</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>539</x>
-     <y>614</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>umax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>umaxslider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>539</x>
-     <y>614</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>719</x>
-     <y>616</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>vmin</sender>
    <signal>valueChanged(int)</signal>
    <receiver>vminslider</receiver>
@@ -958,70 +810,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>grmin</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>grmin()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>504</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>222</x>
-     <y>83</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>grmax</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>grmax()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>584</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>335</x>
-     <y>53</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>brmin</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>brmin()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>654</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>325</x>
-     <y>107</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>brmax</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>brmax()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>714</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>224</x>
-     <y>41</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>ymin</sender>
    <signal>valueChanged(int)</signal>
    <receiver>MainWindow</receiver>
@@ -1066,22 +854,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>779</x>
      <y>177</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>umax</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>umax()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>539</x>
-     <y>614</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>777</x>
-     <y>226</y>
     </hint>
    </hints>
   </connection>
@@ -1182,22 +954,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>umaxslider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>umax</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>719</x>
-     <y>616</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>539</x>
-     <y>614</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>vminslider</sender>
    <signal>valueChanged(int)</signal>
    <receiver>vmin</receiver>
@@ -1226,22 +982,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>549</x>
      <y>714</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RGB</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>rgbclicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>155</x>
-     <y>439</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>231</x>
-     <y>494</y>
     </hint>
    </hints>
   </connection>
@@ -1322,6 +1062,278 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>1027</x>
      <y>762</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>umaxslider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>umax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>616</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>539</x>
+     <y>614</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>umax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>umaxslider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>539</x>
+     <y>614</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>719</x>
+     <y>616</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>umax</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>umax()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>539</x>
+     <y>614</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>777</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>umaxslider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>umax</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>616</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>539</x>
+     <y>614</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grslidermax</sender>
+   <signal>sliderMoved(double)</signal>
+   <receiver>grmax</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>617</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>584</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grmax</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>grslidermax</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>584</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>617</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>brslidermin</sender>
+   <signal>sliderMoved(double)</signal>
+   <receiver>brmin</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>654</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>brmin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>brslidermin</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>654</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>698</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grmin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>grmin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>504</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>83</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grmax</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>grmax()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>584</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>53</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>brmin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>brmin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>654</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>325</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>brmax</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>brslidermax</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>714</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>757</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>brslidermax</sender>
+   <signal>sliderMoved(double)</signal>
+   <receiver>brmax</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>757</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>714</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>brmax</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>brmax()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>714</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>41</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grmin</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>grslidermin</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>504</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>497</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grslidermin</sender>
+   <signal>sliderMoved(double)</signal>
+   <receiver>grmin</receiver>
+   <slot>setValue(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>497</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>504</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RGB</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rgbclicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>155</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>494</y>
     </hint>
    </hints>
   </connection>

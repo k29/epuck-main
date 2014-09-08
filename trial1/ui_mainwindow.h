@@ -1,8 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Tue Aug 12 11:14:01 2014
-**      by: Qt User Interface Compiler version 4.8.1
+** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -110,7 +109,7 @@ public:
     QLabel *label_15;
     QPushButton *pushButton_3;
     QPushButton *pushButton_4;
-    QWidget *widget;
+    QWidget *layoutWidget4;
     QVBoxLayout *verticalLayout_10;
     QPushButton *pushButton_5;
     QPushButton *pushButton_6;
@@ -144,7 +143,7 @@ public:
         listWidget->setGeometry(QRect(720, 480, 111, 192));
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(840, 480, 145, 235));
+        layoutWidget->setGeometry(QRect(840, 480, 145, 191));
         verticalLayout_9 = new QVBoxLayout(layoutWidget);
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -182,7 +181,7 @@ public:
 
         layoutWidget1 = new QWidget(centralWidget);
         layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(430, 470, 281, 261));
+        layoutWidget1->setGeometry(QRect(430, 470, 281, 211));
         verticalLayout_8 = new QVBoxLayout(layoutWidget1);
         verticalLayout_8->setSpacing(6);
         verticalLayout_8->setContentsMargins(11, 11, 11, 11);
@@ -330,7 +329,7 @@ public:
 
         layoutWidget2 = new QWidget(centralWidget);
         layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(30, 480, 381, 183));
+        layoutWidget2->setGeometry(QRect(30, 480, 381, 290));
         verticalLayout_7 = new QVBoxLayout(layoutWidget2);
         verticalLayout_7->setSpacing(6);
         verticalLayout_7->setContentsMargins(11, 11, 11, 11);
@@ -350,9 +349,9 @@ public:
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         grslidermin = new QwtSlider(layoutWidget2);
         grslidermin->setObjectName(QString::fromUtf8("grslidermin"));
-        grslidermin->setMass(0);
-        grslidermin->setBorderWidth(2);
-        grslidermin->setSpacing(2);
+        grslidermin->setProperty("mass", QVariant(0));
+        grslidermin->setProperty("borderWidth", QVariant(2));
+        grslidermin->setProperty("spacing", QVariant(2));
 
         verticalLayout_4->addWidget(grslidermin);
 
@@ -443,7 +442,7 @@ public:
 
         layoutWidget3 = new QWidget(centralWidget);
         layoutWidget3->setObjectName(QString::fromUtf8("layoutWidget3"));
-        layoutWidget3->setGeometry(QRect(990, 480, 101, 239));
+        layoutWidget3->setGeometry(QRect(990, 480, 101, 265));
         verticalLayout_12 = new QVBoxLayout(layoutWidget3);
         verticalLayout_12->setSpacing(6);
         verticalLayout_12->setContentsMargins(11, 11, 11, 11);
@@ -538,20 +537,20 @@ public:
 
         verticalLayout_12->addLayout(verticalLayout_11);
 
-        widget = new QWidget(centralWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(1100, 480, 99, 62));
-        verticalLayout_10 = new QVBoxLayout(widget);
+        layoutWidget4 = new QWidget(centralWidget);
+        layoutWidget4->setObjectName(QString::fromUtf8("layoutWidget4"));
+        layoutWidget4->setGeometry(QRect(1100, 480, 100, 70));
+        verticalLayout_10 = new QVBoxLayout(layoutWidget4);
         verticalLayout_10->setSpacing(6);
         verticalLayout_10->setContentsMargins(11, 11, 11, 11);
         verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
         verticalLayout_10->setContentsMargins(0, 0, 0, 0);
-        pushButton_5 = new QPushButton(widget);
+        pushButton_5 = new QPushButton(layoutWidget4);
         pushButton_5->setObjectName(QString::fromUtf8("pushButton_5"));
 
         verticalLayout_10->addWidget(pushButton_5);
 
-        pushButton_6 = new QPushButton(widget);
+        pushButton_6 = new QPushButton(layoutWidget4);
         pushButton_6->setObjectName(QString::fromUtf8("pushButton_6"));
 
         verticalLayout_10->addWidget(pushButton_6);
@@ -561,63 +560,71 @@ public:
         layoutWidget->raise();
         layoutWidget->raise();
         layoutWidget->raise();
+        layoutWidget->raise();
         mylabel1->raise();
         mylabel2->raise();
         listWidget->raise();
-        pushButton_5->raise();
-        pushButton_6->raise();
+        label_4->raise();
+        label_5->raise();
+        label_6->raise();
+        vmin->raise();
+        vmax->raise();
+        vminslider->raise();
+        vmaxslider->raise();
+        label_4->raise();
+        YUV->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1291, 25));
+        menuBar->setGeometry(QRect(0, 0, 1291, 27));
         MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
 
         retranslateUi(MainWindow);
-        QObject::connect(grmin, SIGNAL(valueChanged(double)), grslidermin, SLOT(setValue(double)));
-        QObject::connect(grslidermin, SIGNAL(sliderMoved(double)), grmin, SLOT(setValue(double)));
-        QObject::connect(grslidermax, SIGNAL(sliderMoved(double)), grmax, SLOT(setValue(double)));
-        QObject::connect(grmax, SIGNAL(valueChanged(double)), grslidermax, SLOT(setValue(double)));
-        QObject::connect(brslidermin, SIGNAL(sliderMoved(double)), brmin, SLOT(setValue(double)));
-        QObject::connect(brmin, SIGNAL(valueChanged(double)), brslidermin, SLOT(setValue(double)));
-        QObject::connect(brslidermax, SIGNAL(sliderMoved(double)), brmax, SLOT(setValue(double)));
-        QObject::connect(brmax, SIGNAL(valueChanged(double)), brslidermax, SLOT(setValue(double)));
         QObject::connect(yminslider, SIGNAL(sliderMoved(int)), ymin, SLOT(setValue(int)));
         QObject::connect(ymin, SIGNAL(valueChanged(int)), yminslider, SLOT(setValue(int)));
         QObject::connect(ymaxslider, SIGNAL(sliderMoved(int)), ymax, SLOT(setValue(int)));
         QObject::connect(ymax, SIGNAL(valueChanged(int)), ymaxslider, SLOT(setValue(int)));
         QObject::connect(uminslider, SIGNAL(sliderMoved(int)), umin, SLOT(setValue(int)));
         QObject::connect(umin, SIGNAL(valueChanged(int)), uminslider, SLOT(setValue(int)));
-        QObject::connect(umaxslider, SIGNAL(sliderMoved(int)), umax, SLOT(setValue(int)));
-        QObject::connect(umax, SIGNAL(valueChanged(int)), umaxslider, SLOT(setValue(int)));
         QObject::connect(vmin, SIGNAL(valueChanged(int)), vminslider, SLOT(setValue(int)));
         QObject::connect(vminslider, SIGNAL(sliderMoved(int)), vmin, SLOT(setValue(int)));
         QObject::connect(vmaxslider, SIGNAL(sliderMoved(int)), vmax, SLOT(setValue(int)));
         QObject::connect(vmax, SIGNAL(valueChanged(int)), vmaxslider, SLOT(setValue(int)));
-        QObject::connect(grmin, SIGNAL(valueChanged(double)), MainWindow, SLOT(grmin()));
-        QObject::connect(grmax, SIGNAL(valueChanged(double)), MainWindow, SLOT(grmax()));
-        QObject::connect(brmin, SIGNAL(valueChanged(double)), MainWindow, SLOT(brmin()));
-        QObject::connect(brmax, SIGNAL(valueChanged(double)), MainWindow, SLOT(brmax()));
         QObject::connect(ymin, SIGNAL(valueChanged(int)), MainWindow, SLOT(ymin()));
         QObject::connect(ymax, SIGNAL(valueChanged(int)), MainWindow, SLOT(ymax()));
         QObject::connect(umin, SIGNAL(valueChanged(int)), MainWindow, SLOT(umin()));
-        QObject::connect(umax, SIGNAL(valueChanged(int)), MainWindow, SLOT(umax()));
         QObject::connect(vmin, SIGNAL(valueChanged(int)), MainWindow, SLOT(vmin()));
         QObject::connect(vmax, SIGNAL(valueChanged(int)), MainWindow, SLOT(vmax()));
         QObject::connect(YUV, SIGNAL(clicked()), MainWindow, SLOT(yuvclicked()));
         QObject::connect(yminslider, SIGNAL(valueChanged(int)), ymin, SLOT(setValue(int)));
         QObject::connect(ymaxslider, SIGNAL(valueChanged(int)), ymax, SLOT(setValue(int)));
         QObject::connect(uminslider, SIGNAL(valueChanged(int)), umin, SLOT(setValue(int)));
-        QObject::connect(umaxslider, SIGNAL(valueChanged(int)), umax, SLOT(setValue(int)));
         QObject::connect(vminslider, SIGNAL(valueChanged(int)), vmin, SLOT(setValue(int)));
         QObject::connect(vmaxslider, SIGNAL(valueChanged(int)), vmax, SLOT(setValue(int)));
-        QObject::connect(RGB, SIGNAL(clicked()), MainWindow, SLOT(rgbclicked()));
         QObject::connect(save, SIGNAL(clicked()), MainWindow, SLOT(saveclicked()));
         QObject::connect(load, SIGNAL(clicked()), MainWindow, SLOT(loadclicked()));
         QObject::connect(quit, SIGNAL(clicked()), MainWindow, SLOT(quitclicked()));
         QObject::connect(pushButton, SIGNAL(clicked()), MainWindow, SLOT(asd()));
         QObject::connect(pushButton_2, SIGNAL(clicked()), MainWindow, SLOT(lookupclicked()));
+        QObject::connect(umaxslider, SIGNAL(sliderMoved(int)), umax, SLOT(setValue(int)));
+        QObject::connect(umax, SIGNAL(valueChanged(int)), umaxslider, SLOT(setValue(int)));
+        QObject::connect(umax, SIGNAL(valueChanged(int)), MainWindow, SLOT(umax()));
+        QObject::connect(umaxslider, SIGNAL(valueChanged(int)), umax, SLOT(setValue(int)));
+        QObject::connect(grslidermax, SIGNAL(sliderMoved(double)), grmax, SLOT(setValue(double)));
+        QObject::connect(grmax, SIGNAL(valueChanged(double)), grslidermax, SLOT(setValue(double)));
+        QObject::connect(brslidermin, SIGNAL(sliderMoved(double)), brmin, SLOT(setValue(double)));
+        QObject::connect(brmin, SIGNAL(valueChanged(double)), brslidermin, SLOT(setValue(double)));
+        QObject::connect(grmin, SIGNAL(valueChanged(double)), MainWindow, SLOT(grmin()));
+        QObject::connect(grmax, SIGNAL(valueChanged(double)), MainWindow, SLOT(grmax()));
+        QObject::connect(brmin, SIGNAL(valueChanged(double)), MainWindow, SLOT(brmin()));
+        QObject::connect(brmax, SIGNAL(valueChanged(double)), brslidermax, SLOT(setValue(double)));
+        QObject::connect(brslidermax, SIGNAL(sliderMoved(double)), brmax, SLOT(setValue(double)));
+        QObject::connect(brmax, SIGNAL(valueChanged(double)), MainWindow, SLOT(brmax()));
+        QObject::connect(grmin, SIGNAL(valueChanged(double)), grslidermin, SLOT(setValue(double)));
+        QObject::connect(grslidermin, SIGNAL(sliderMoved(double)), grmin, SLOT(setValue(double)));
+        QObject::connect(RGB, SIGNAL(clicked()), MainWindow, SLOT(rgbclicked()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -653,8 +660,8 @@ public:
         filename->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", 0, QApplication::UnicodeUTF8));
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Ubuntu';\"><br /></p></body></html>", 0, QApplication::UnicodeUTF8));
         save->setText(QApplication::translate("MainWindow", "Save", 0, QApplication::UnicodeUTF8));
         pushButton_2->setText(QApplication::translate("MainWindow", "Make lookup table", 0, QApplication::UnicodeUTF8));
         quit->setText(QApplication::translate("MainWindow", "Quit", 0, QApplication::UnicodeUTF8));

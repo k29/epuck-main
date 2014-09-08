@@ -223,7 +223,7 @@ void MainWindow::IplImage2QImage(IplImage *iplImg, QImage *image)
 void MainWindow::asd()
 {
     cam = new CamCapture(false);//, "../pic-2.jpg");
-    cam->init(0);
+    cam->init(1);
 
     isCameraOn = 1;
 

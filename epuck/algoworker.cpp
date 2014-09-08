@@ -835,6 +835,7 @@ double AlgoWorker::pointToAngle(int n)
 void AlgoWorker::onTimeout()
 {
     bool isBSAvailable = false;
+    return;
     bsMutex->lock();
     if(bs)
     {
@@ -867,7 +868,7 @@ void AlgoWorker::onTimeout()
     }
 //    qDebug() << "Y222OOOOOOOOOOO";
 //    qDebug() << avail3;
-    if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
+    if(allBotVisible == NUMBOTS && isBSAvailable && isRunning && 0)
     {
 //        qDebug() << "YOOOOOOOOOOO\n";
 

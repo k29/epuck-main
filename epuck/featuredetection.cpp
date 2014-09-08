@@ -248,6 +248,7 @@ int FeatureDetection::getRobotIDByColour(BlobColour largeColour, BlobColour smal
 void FeatureDetection::updateBeliefState(CamCapture &cam)
 {
     getBlobs(cam);
+
     //need to see configuration. right now assuming
     //5 bots with colors red, orange, purple, green and pink
 //    qDebug() << blobs_cyan.size();
@@ -280,7 +281,7 @@ void FeatureDetection::updateBeliefState(CamCapture &cam)
             blob.colour = bc;
             blob.x = it->second->centroid.x;
             blob.y = it->second->centroid.y;
-            if(it->second->area > 350)  //if more than 350, it is a large blob, otherwise small blob
+            if(it->second->area > 250)  //if more than 350, it is a large blob, otherwise small blob
             {
                 largeBlobs.push_back(blob);
             }
@@ -291,6 +292,7 @@ void FeatureDetection::updateBeliefState(CamCapture &cam)
         }
 
     }
+
 
     for(int i = 0; i < NUMBOTS; ++i)
     {
@@ -303,6 +305,8 @@ void FeatureDetection::updateBeliefState(CamCapture &cam)
         customBlob s = getClosest(it->second->centroid, smallBlobs);
 
         int id = getRobotIDByColour(l.colour, s.colour);
+        if(id >= NUMBOTS)
+            continue;
         bs.bot[id].isVisible = true;
         bs.bot[id].x = it->second->centroid.x;
         bs.bot[id].y = it->second->centroid.y;

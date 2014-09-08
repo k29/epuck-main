@@ -78,6 +78,7 @@ CamError CamCapture::init(int nCamera)
 
 #ifdef CAMCAPTURE_DEBUG
     showSeg = cvCreateImage(cvSize(width_var, height_var), 8, 3);
+
 #endif
 
     // width_var = rgbimg->width;

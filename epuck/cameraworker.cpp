@@ -87,7 +87,12 @@ void CameraWorker::onTimeout()
         cvCircle(cc->rgbimg, cvPoint(circle.centre.x, circle.centre.y), circle.radius, cvScalar(0,0,255), 3);
     }
 //    qDebug() << "Bot state:" << fd->bot.x<< fd->bot.y<< fd->bot.angle;
+#ifdef CAMCAPTURE_DEBUG
+    frame = cc->showSeg;
+#endif
+#ifndef CAMCAPTURE_DEBUG
     frame = cc->rgbimg;
+#endif
     cvCvtColor(frame, frame,CV_BGR2RGB);
     QImage qimg((uchar*)frame->imageData, frame->width, frame->height, frame->widthStep, QImage::Format_RGB888);
     myMutex->lock();
