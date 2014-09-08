@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, SIGNAL(stopAlgo()), aw, SLOT(onStopAlgo()));
 
-//    algoThread->start(QThread::TimeCriticalPriority);
+    algoThread->start(QThread::TimeCriticalPriority);
 
 
     connect(aw, SIGNAL(gotLine(int, int, int, int)), cw, SLOT(onGotLine(int, int, int, int)));
