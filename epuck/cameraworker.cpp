@@ -47,7 +47,6 @@ void CameraWorker::process()
 }
 
 
-
 void CameraWorker::onTimeout()
 {
     cc->getImage();
@@ -67,6 +66,23 @@ void CameraWorker::onTimeout()
     fd->printBotSimulation(cc, **bs);
 #endif
     bsMutex->unlock();
+
+    fstream input;
+    input.open("in.txt", ios::out);
+    for(int i = 0; i < NUMBOTS; ++i)
+    {
+        input << (*(*bs)).bot[i].x << " " << (*(*bs)).bot[i].y << endl;
+    }
+    input.close();
+    system("./voronoi < in.txt > out.txt");
+
+    fstream output;
+    output.open("out.txt", ios::in);
+    double x1, x2, y1, y2;
+    while(output >> x1 >> y1 >> x2 >> y2)
+    {
+        cvLine(cc->rgbimg, cvPoint(x1, y1), cvPoint(x2, y2), cvScalar(255, 0, 0), 1);
+    }
 
     if(isLinePresent)
     {

@@ -51,6 +51,27 @@ signals:
 
 
 private:
+    class LineSegment
+    {
+    public:
+        double x1;
+        double y1;
+        double x2;
+        double y2;
+        LineSegment(double _x1, double _y1, double _x2, double _y2)
+        {
+            x1 = _x1;
+            y1 = _y1;
+            x2 = _x2;
+            y2 = _y2;
+        }
+        LineSegment()
+        {
+            x1 = x2 = y1 = y2 = 0;
+        }
+    };
+
+
     HAL::Serial s[NUMBOTS];
     QTimer *timer;
     QMutex* bsMutex;
@@ -110,6 +131,14 @@ private:
     CvPoint getClosest(CvPoint p1, CvPoint p2, int n);
     void getNeighbourIndicesCircle(int n, int* indexList);
     Hungarian h;
+    std::vector<LineSegment> ls;
+    bool onLineSegment(CvPoint p, CvPoint q, CvPoint r);
+    int orientation(CvPoint p, CvPoint q, CvPoint r);
+    bool doIntersect(CvPoint p1, CvPoint q1, CvPoint p2, CvPoint q2);
+    bool isClose(CvPoint p, CvPoint q);
+    bool isIntersecting(LineSegment s1, LineSegment s2);
+    CvPoint lineLineSegmentCircleIntersect(CvPoint centre, double radius, LineSegment s);
+    CvPoint getDestinationVoronoi(int n);
 };
 
 #endif // ALGOWORKER_H

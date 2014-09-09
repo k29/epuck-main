@@ -50,7 +50,9 @@ void AlgoWorker::process()
     }
     // allocate resources using new here
     QTime now = QTime::currentTime();
+//    qsrand(50);
     qsrand(now.msec());
+//    cout << "time " << now.msec();
     qDebug() << "Algo Worker thread started.";
     frameCounter = 0;
     isRunning = false;
@@ -832,6 +834,214 @@ double AlgoWorker::pointToAngle(int n)
     return pointToAngle(cvPoint(localBS.bot[n].x, localBS.bot[n].y));
 }
 
+bool AlgoWorker::onLineSegment(CvPoint p, CvPoint q, CvPoint r)
+{
+    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) &&
+        q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y))
+       return true;
+
+    return false;
+}
+
+// To find orientation of ordered triplet (p, q, r).
+// The function returns following values
+// 0 --> p, q and r are colinear
+// 1 --> Clockwise
+// 2 --> Counterclockwise
+int AlgoWorker::orientation(CvPoint p, CvPoint q, CvPoint r)
+{
+    // See 10th slides from following link for derivation of the formula
+    // http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
+    int val = (q.y - p.y) * (r.x - q.x) -
+              (q.x - p.x) * (r.y - q.y);
+
+    if (val == 0) return 0;  // colinear
+
+    return (val > 0)? 1: 2; // clock or counterclock wise
+}
+
+// The main function that returns true if line LineSegment 'p1q1'
+// and 'p2q2' intersect.
+bool AlgoWorker::doIntersect(CvPoint p1, CvPoint q1, CvPoint p2, CvPoint q2)
+{
+    // Find the four orientations needed for general and
+    // special cases
+    int o1 = orientation(p1, q1, p2);
+    int o2 = orientation(p1, q1, q2);
+    int o3 = orientation(p2, q2, p1);
+    int o4 = orientation(p2, q2, q1);
+
+    // General case
+    if (o1 != o2 && o3 != o4)
+        return true;
+
+    // Special Cases
+    // p1, q1 and p2 are colinear and p2 lies on LineSegment p1q1
+    if (o1 == 0 && onLineSegment(p1, p2, q1)) return true;
+
+    // p1, q1 and p2 are colinear and q2 lies on LineSegment p1q1
+    if (o2 == 0 && onLineSegment(p1, q2, q1)) return true;
+
+    // p2, q2 and p1 are colinear and p1 lies on LineSegment p2q2
+    if (o3 == 0 && onLineSegment(p2, p1, q2)) return true;
+
+     // p2, q2 and q1 are colinear and q1 lies on LineSegment p2q2
+    if (o4 == 0 && onLineSegment(p2, q1, q2)) return true;
+
+    return false; // Doesn't fall in any of the above cases
+}
+
+
+
+bool AlgoWorker::isClose(CvPoint p, CvPoint q)
+{
+    if(fabs(p.x - q.x) < 4 && fabs(p.y - q.y) < 4)
+        return true;
+    else
+        return false;
+}
+
+
+bool AlgoWorker::isIntersecting(LineSegment s1, LineSegment s2)
+{
+    CvPoint p1, p2, q1, q2;
+    p1.x = s1.x1;
+    p1.y = s1.y1;
+    p2.x = s1.x2;
+    p2.y = s1.y2;
+
+    q1.x = s2.x1;
+    q1.y = s2.y1;
+    q2.x = s2.x2;
+    q2.y = s2.y2;
+    if(isClose(p1, q1) || isClose(p1, q2) || isClose(p2, q1) ||isClose(p2, q2))
+        return false;
+    if(doIntersect(p1, p2, q1, q2))
+        return true;
+    else
+        return false;
+}
+
+
+CvPoint AlgoWorker::lineLineSegmentCircleIntersect(CvPoint centre, double radius, LineSegment s)
+{
+    double a = s.x1 - s.x2;
+    double b = s.x2 - centre.x;
+    double c = s.y1 - s.y2;
+    double d = s.y2 - centre.y;
+    double discriminantSquare = (2.*a*b + 2.*c*d)*(2.*a*b + 2.*c*d) - 4.*(a*a + c*c)*(b*b + d*d - radius*radius);
+    if(discriminantSquare < 0)
+    {
+        CvPoint p;
+        p.x = -999;
+        p.y = -999;
+        return p;
+    }
+    double t1 = ((-(2.*a*b + 2.*c*d))+ sqrt(discriminantSquare))/(2.*(a*a + c*c));
+    double t2 = ((-(2.*a*b + 2.*c*d))- sqrt(discriminantSquare))/(2.*(a*a + c*c));
+    double t;
+    if(t1 >= 0 && t1 <= 1)
+    {
+        t = t1;
+    }
+    else if(t2 >=0 && t2 <= 1)
+    {
+        t = t2;
+    }
+    else
+    {
+        CvPoint p;
+        p.x = -999;
+        p.y = -999;
+        return p;
+    }
+
+    CvPoint p;
+    // t = t2;
+//    cout << t << endl;
+    p.x = t*s.x1 + (1.0 - t)*s.x2;
+    p.y = t*s.y1 + (1.0 - t)*s.y2;
+    return p;
+}
+
+
+
+CvPoint AlgoWorker::getDestinationVoronoi(int n)
+{
+    int numIntersections = 0;
+    if(fabs(getDistance(cvPoint(localBS.bot[n].x, localBS.bot[n].y), destinationCircle.centre) - destinationCircle.radius) < 10)
+        return cvPoint(localBS.bot[n].x, localBS.bot[n].y);
+    CvPoint finalPoints[2];
+    for (int i = 0; i < ls.size() && numIntersections < 2; ++i)
+    {
+        LineSegment temp1 = LineSegment(localBS.bot[n].x, localBS.bot[n].y, ls[i].x1, ls[i].y1);
+        LineSegment temp2 = LineSegment(localBS.bot[n].x, localBS.bot[n].y, ls[i].x2, ls[i].y2);
+        bool isPartOfCell = true;
+        for (int j = 0; j < ls.size(); ++j)
+        {
+            // if(j == i) continue;
+            if(isIntersecting(temp1, ls[j]) || isIntersecting(temp2, ls[j]))
+            {
+                isPartOfCell = false;
+                break;
+            }
+        }
+        if(isPartOfCell)
+        {
+//            cvLine(img, cvPoint(ls[i].x1, ls[i].y1), cvPoint(ls[i].x2, ls[i].y2), cvScalar(255, 255, 0), 3);
+            CvPoint p = lineLineSegmentCircleIntersect(destinationCircle.centre, destinationCircle.radius, ls[i]);
+            if(p.x != -999 && p.y != -999)
+            {
+                finalPoints[numIntersections] = p;
+                numIntersections++;
+                if(numIntersections == 2)
+                {
+                    if(getDistance(finalPoints[0], finalPoints[1]) < 3)
+                    {
+                        numIntersections = 1;
+                    }
+                }
+
+//                cvLine(img, cvPoint(ls[i].x1, ls[i].y1), cvPoint(ls[i].x2, ls[i].y2), cvScalar(127, 127, 0), 3);
+//                cvCircle(img, p, 3, cvScalar(127, 0, 0), 3);
+            }
+        }
+//        cvShowImage("asd", img);
+        // cvWaitKey();
+    }
+    if(numIntersections == 2)
+    {
+        qDebug() << "2 intersections for bot " << n ;
+//        return finalPoints[1];
+        CvPoint midp = getMidPoint(finalPoints[0], finalPoints[1]);
+        return getPerpPointOnCircle(midp);
+    }
+    else
+    {
+        //0 or 1 intersections, means go to closest point
+        CvPoint ans;
+        double minDistance = 9999999.0;
+        for(int i = 0; i < ls.size(); ++i)
+        {
+            CvPoint p1 = cvPoint(ls[i].x1, ls[i].y1);
+            CvPoint p2 = cvPoint(ls[i].x2, ls[i].y2);
+            double distance = getDistance(p1, destinationCircle.centre);
+            if(fabs(distance - destinationCircle.radius) < minDistance)
+            {
+                minDistance = fabs(distance - destinationCircle.radius);
+                ans = p1;
+            }
+            distance = getDistance(p2, destinationCircle.centre);
+            if(fabs(distance - destinationCircle.radius) < minDistance)
+            {
+                minDistance = fabs(distance - destinationCircle.radius);
+                ans = p2;
+            }
+        }
+        return ans;
+    }
+}
+
 void AlgoWorker::onTimeout()
 {
     bool isBSAvailable = false;
@@ -901,6 +1111,7 @@ void AlgoWorker::onTimeout()
         case MAKE_CIRCLE:
         {
 //            qDebug() << "in make circle";
+            totDistance = 0.0;
             std::vector<cv::Point> pList;
             cv::Point2f centre;
             float radius;
@@ -913,10 +1124,27 @@ void AlgoWorker::onTimeout()
 //            qDebug() << centre.x << centre.y;
             destinationCircle.radius = radius;
             emit printCircle(destinationCircle);
+            ls.clear();
+            fstream input;
+            input.open("in.txt", ios::out);
+            for(int i = 0; i < NUMBOTS; ++i)
+            {
+                input << localBS.bot[i].x << " " << localBS.bot[i].y << endl;
+            }
+            input.close();
+            system("./voronoi < in.txt > out.txt");
+
+            fstream output;
+            output.open("out.txt", ios::in);
+            double x1, x2, y1, y2;
+            while(output >> x1 >> y1 >> x2 >> y2)
+            {
+                ls.push_back(LineSegment(x1, y1, x2, y2));
+            }
 
             for(int i = 0; i < NUMBOTS; ++i)
             {
-                destinationPoint[i] = getPerpPointOnCircle(i);
+                destinationPoint[i] = getDestinationVoronoi(i);
                 if(destinationPoint[i].y > 470)
                 {
                     destinationPoint[i].y = 470;
@@ -926,6 +1154,7 @@ void AlgoWorker::onTimeout()
 //                    qDebug() << "a";
                     destinationPoint[i].y = 10;
                 }
+                totDistance += getDistance(destinationPoint[i], cvPoint(localBS.bot[i].x, localBS.bot[i].y));
 //                qDebug() << "destinationPoint[" << i << "] = cvPoint(" << destinationPoint[i].x << "," << destinationPoint[i].y << ");";
 //                qDebug() << destinationPoint[i].x << destinationPoint[i].y;
             }
@@ -967,7 +1196,6 @@ void AlgoWorker::onTimeout()
 //                sleep(10);
                 numRounds = 0;
                 numActivations = 0;
-                totDistance = 0.0;
                 robotActive = 0;
             }
         }
