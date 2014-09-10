@@ -1087,6 +1087,8 @@ void AlgoWorker::onTimeout()
 
         case SAVE_CURRENT_POSITION:
             totDistance = 0.0;
+            numRounds = 0;
+            numActivations = 0;
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 savedPosition[i] = cvPoint(localBS.bot[i].x, localBS.bot[i].y);
@@ -1098,6 +1100,8 @@ void AlgoWorker::onTimeout()
         {
             int numCompleted = 0;
             totDistance = 0.0;
+            numRounds = 0;
+            numActivations = 0;
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 if(moveToPoint(savedPosition[i], localBS.bot[i], i))
@@ -1143,7 +1147,7 @@ void AlgoWorker::onTimeout()
             {
                 ls.push_back(LineSegment(x1, y1, x2, y2));
             }
-
+            output.close();
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 destinationPoint[i] = getDestinationVoronoi(i);
@@ -1196,7 +1200,7 @@ void AlgoWorker::onTimeout()
                 bool allOnCircle = true;
                 for(int i = 0; i < NUMBOTS; ++i)
                 {
-                    if(fabs(getDistance(destinationPoint[i], destinationCircle.centre) - destinationCircle.radius) > 5)
+                    if(fabs(getDistance(destinationPoint[i], destinationCircle.centre) - destinationCircle.radius) > FINAL_REACHED_THRESHOLD)
                     {
                         allOnCircle = false;
                         break;
@@ -1204,6 +1208,7 @@ void AlgoWorker::onTimeout()
                 }
                 if(allOnCircle == false)
                 {
+                    qDebug() << "All not on circle";
                     currentState = MAKE_CIRCLE;
                 }
                 else
@@ -1386,7 +1391,7 @@ void AlgoWorker::onTimeout()
             //calculate the destination points
             //assume leader is destinationPoint[0]
             const double stableAngle = 2.0*CV_PI/((double)NUMBOTS);
-            CvPoint myPoint[5];
+            CvPoint myPoint[NUMBOTS];
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 myPoint[i] = angleToPoint(pointToAngle(destinationPoint[0]) + stableAngle*i);

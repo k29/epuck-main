@@ -4,7 +4,7 @@
 #include <opencv2/opencv.hpp>
 
 //enum Command {FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, STOP, SPEED1, SPEED2, SPEED3, SPEED4, F_PULSE, B_PULSE, L_PULSE, R_PULSE};
-#define NUMBOTS 5
+#define NUMBOTS 10
 #define SIMULATION 1
 //plz to store angle in radians
 struct Bot
