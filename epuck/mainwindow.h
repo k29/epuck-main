@@ -28,7 +28,11 @@ private slots:
     void on_algoStartButton_clicked();
 
     void on_algoStopButton_clicked();
+    void onGetResult(QString s);
 
+    void on_algoComboBox_currentIndexChanged(int index);
+
+    void on_algoActivationComboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
@@ -46,6 +50,8 @@ signals:
     void stopCamThread();
     void stopAlgoThread();
     void stopAlgo();
+    void algoChanged(int index);
+    void algoActivationChanged(int index);
 };
 
 #endif // MAINWINDOW_H

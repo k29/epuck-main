@@ -22,12 +22,12 @@ static const uint qt_meta_data_AlgoWorker[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       5,       // signalCount
+       6,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
       24,   12,   11,   11, 0x05,
@@ -35,12 +35,15 @@ static const uint qt_meta_data_AlgoWorker[] = {
       81,   79,   11,   11, 0x05,
      101,   11,   11,   11, 0x05,
      116,  112,   11,   11, 0x05,
+     133,  131,   11,   11, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-     131,   11,   11,   11, 0x0a,
-     141,   11,   11,   11, 0x0a,
-     153,   11,   11,   11, 0x0a,
+     152,   11,   11,   11, 0x0a,
      162,   11,   11,   11, 0x0a,
+     174,   11,   11,   11, 0x0a,
+     183,   11,   11,   11, 0x0a,
+     202,  196,   11,   11, 0x0a,
+     221,  196,   11,   11, 0x0a,
 
        0        // eod
 };
@@ -50,8 +53,10 @@ static const char qt_meta_stringdata_AlgoWorker[] = {
     "gotLine(int,int,int,int)\0p\0"
     "printDestination(PointList)\0c\0"
     "printCircle(Circle)\0finished()\0err\0"
-    "error(QString)\0process()\0onTimeout()\0"
-    "onStop()\0onStopAlgo()\0"
+    "error(QString)\0s\0gotResult(QString)\0"
+    "process()\0onTimeout()\0onStop()\0"
+    "onStopAlgo()\0index\0onAlgoChanged(int)\0"
+    "onAlgoActivationChanged(int)\0"
 };
 
 void AlgoWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -65,10 +70,13 @@ void AlgoWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 2: _t->printCircle((*reinterpret_cast< Circle(*)>(_a[1]))); break;
         case 3: _t->finished(); break;
         case 4: _t->error((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 5: _t->process(); break;
-        case 6: _t->onTimeout(); break;
-        case 7: _t->onStop(); break;
-        case 8: _t->onStopAlgo(); break;
+        case 5: _t->gotResult((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 6: _t->process(); break;
+        case 7: _t->onTimeout(); break;
+        case 8: _t->onStop(); break;
+        case 9: _t->onStopAlgo(); break;
+        case 10: _t->onAlgoChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 11: _t->onAlgoActivationChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -106,9 +114,9 @@ int AlgoWorker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 12;
     }
     return _id;
 }
@@ -145,5 +153,12 @@ void AlgoWorker::error(QString _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
+}
+
+// SIGNAL 5
+void AlgoWorker::gotResult(QString _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 QT_END_MOC_NAMESPACE

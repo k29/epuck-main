@@ -14,11 +14,12 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QComboBox>
-#include <QtGui/QHBoxLayout>
+#include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenuBar>
+#include <QtGui/QPlainTextEdit>
 #include <QtGui/QPushButton>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolBar>
@@ -34,31 +35,18 @@ public:
     QLabel *imgLabel;
     QLabel *fpsLabel;
     QLabel *FPS;
-    QLabel *configHeadingLabel;
-    QWidget *verticalLayoutWidget;
-    QVBoxLayout *verticalLayout;
-    QHBoxLayout *horizontalLayout;
-    QLabel *botLabel;
-    QComboBox *botColor;
-    QComboBox *botSerial;
-    QHBoxLayout *horizontalLayout_2;
-    QLabel *botLabel_2;
-    QComboBox *botColor_2;
-    QComboBox *botSerial_2;
-    QHBoxLayout *horizontalLayout_3;
-    QLabel *botLabel_3;
-    QComboBox *botColor_3;
-    QComboBox *botSerial_3;
-    QHBoxLayout *horizontalLayout_4;
-    QLabel *botLabel_4;
-    QComboBox *botColor_4;
-    QComboBox *botSerial_4;
-    QHBoxLayout *horizontalLayout_5;
-    QLabel *botLabel_5;
-    QComboBox *botColor_5;
-    QComboBox *botSerial_5;
-    QPushButton *algoStopButton;
     QPushButton *algoStartButton;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *label_3;
+    QGridLayout *gridLayout;
+    QLabel *Algorithm;
+    QLabel *Activation;
+    QComboBox *algoComboBox;
+    QComboBox *algoActivationComboBox;
+    QPushButton *algoStopButton;
+    QLabel *label_4;
+    QPlainTextEdit *resultText;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -80,138 +68,68 @@ public:
         FPS = new QLabel(centralWidget);
         FPS->setObjectName(QString::fromUtf8("FPS"));
         FPS->setGeometry(QRect(10, 500, 66, 17));
-        configHeadingLabel = new QLabel(centralWidget);
-        configHeadingLabel->setObjectName(QString::fromUtf8("configHeadingLabel"));
-        configHeadingLabel->setGeometry(QRect(680, 20, 191, 20));
-        QFont font;
-        font.setPointSize(13);
-        font.setBold(true);
-        font.setWeight(75);
-        configHeadingLabel->setFont(font);
-        verticalLayoutWidget = new QWidget(centralWidget);
-        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(670, 70, 281, 171));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
-        verticalLayout->setSpacing(6);
-        verticalLayout->setContentsMargins(11, 11, 11, 11);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        botLabel = new QLabel(verticalLayoutWidget);
-        botLabel->setObjectName(QString::fromUtf8("botLabel"));
-
-        horizontalLayout->addWidget(botLabel);
-
-        botColor = new QComboBox(verticalLayoutWidget);
-        botColor->setObjectName(QString::fromUtf8("botColor"));
-
-        horizontalLayout->addWidget(botColor);
-
-        botSerial = new QComboBox(verticalLayoutWidget);
-        botSerial->setObjectName(QString::fromUtf8("botSerial"));
-
-        horizontalLayout->addWidget(botSerial);
-
-
-        verticalLayout->addLayout(horizontalLayout);
-
-        horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        botLabel_2 = new QLabel(verticalLayoutWidget);
-        botLabel_2->setObjectName(QString::fromUtf8("botLabel_2"));
-
-        horizontalLayout_2->addWidget(botLabel_2);
-
-        botColor_2 = new QComboBox(verticalLayoutWidget);
-        botColor_2->setObjectName(QString::fromUtf8("botColor_2"));
-
-        horizontalLayout_2->addWidget(botColor_2);
-
-        botSerial_2 = new QComboBox(verticalLayoutWidget);
-        botSerial_2->setObjectName(QString::fromUtf8("botSerial_2"));
-
-        horizontalLayout_2->addWidget(botSerial_2);
-
-
-        verticalLayout->addLayout(horizontalLayout_2);
-
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        botLabel_3 = new QLabel(verticalLayoutWidget);
-        botLabel_3->setObjectName(QString::fromUtf8("botLabel_3"));
-
-        horizontalLayout_3->addWidget(botLabel_3);
-
-        botColor_3 = new QComboBox(verticalLayoutWidget);
-        botColor_3->setObjectName(QString::fromUtf8("botColor_3"));
-
-        horizontalLayout_3->addWidget(botColor_3);
-
-        botSerial_3 = new QComboBox(verticalLayoutWidget);
-        botSerial_3->setObjectName(QString::fromUtf8("botSerial_3"));
-
-        horizontalLayout_3->addWidget(botSerial_3);
-
-
-        verticalLayout->addLayout(horizontalLayout_3);
-
-        horizontalLayout_4 = new QHBoxLayout();
-        horizontalLayout_4->setSpacing(6);
-        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
-        botLabel_4 = new QLabel(verticalLayoutWidget);
-        botLabel_4->setObjectName(QString::fromUtf8("botLabel_4"));
-
-        horizontalLayout_4->addWidget(botLabel_4);
-
-        botColor_4 = new QComboBox(verticalLayoutWidget);
-        botColor_4->setObjectName(QString::fromUtf8("botColor_4"));
-
-        horizontalLayout_4->addWidget(botColor_4);
-
-        botSerial_4 = new QComboBox(verticalLayoutWidget);
-        botSerial_4->setObjectName(QString::fromUtf8("botSerial_4"));
-
-        horizontalLayout_4->addWidget(botSerial_4);
-
-
-        verticalLayout->addLayout(horizontalLayout_4);
-
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setSpacing(6);
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        botLabel_5 = new QLabel(verticalLayoutWidget);
-        botLabel_5->setObjectName(QString::fromUtf8("botLabel_5"));
-
-        horizontalLayout_5->addWidget(botLabel_5);
-
-        botColor_5 = new QComboBox(verticalLayoutWidget);
-        botColor_5->setObjectName(QString::fromUtf8("botColor_5"));
-
-        horizontalLayout_5->addWidget(botColor_5);
-
-        botSerial_5 = new QComboBox(verticalLayoutWidget);
-        botSerial_5->setObjectName(QString::fromUtf8("botSerial_5"));
-
-        horizontalLayout_5->addWidget(botSerial_5);
-
-
-        verticalLayout->addLayout(horizontalLayout_5);
-
-        algoStopButton = new QPushButton(centralWidget);
-        algoStopButton->setObjectName(QString::fromUtf8("algoStopButton"));
-        algoStopButton->setGeometry(QRect(760, 270, 98, 27));
         algoStartButton = new QPushButton(centralWidget);
         algoStartButton->setObjectName(QString::fromUtf8("algoStartButton"));
         algoStartButton->setEnabled(false);
-        algoStartButton->setGeometry(QRect(730, 320, 98, 27));
+        algoStartButton->setGeometry(QRect(760, 420, 98, 27));
+        verticalLayoutWidget = new QWidget(centralWidget);
+        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(660, 50, 281, 267));
+        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        label_3 = new QLabel(verticalLayoutWidget);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+
+        verticalLayout_2->addWidget(label_3);
+
+        gridLayout = new QGridLayout();
+        gridLayout->setSpacing(6);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        Algorithm = new QLabel(verticalLayoutWidget);
+        Algorithm->setObjectName(QString::fromUtf8("Algorithm"));
+
+        gridLayout->addWidget(Algorithm, 1, 0, 1, 1);
+
+        Activation = new QLabel(verticalLayoutWidget);
+        Activation->setObjectName(QString::fromUtf8("Activation"));
+
+        gridLayout->addWidget(Activation, 2, 0, 1, 1);
+
+        algoComboBox = new QComboBox(verticalLayoutWidget);
+        algoComboBox->setObjectName(QString::fromUtf8("algoComboBox"));
+
+        gridLayout->addWidget(algoComboBox, 1, 1, 1, 1);
+
+        algoActivationComboBox = new QComboBox(verticalLayoutWidget);
+        algoActivationComboBox->setObjectName(QString::fromUtf8("algoActivationComboBox"));
+
+        gridLayout->addWidget(algoActivationComboBox, 2, 1, 1, 1);
+
+
+        verticalLayout_2->addLayout(gridLayout);
+
+        algoStopButton = new QPushButton(verticalLayoutWidget);
+        algoStopButton->setObjectName(QString::fromUtf8("algoStopButton"));
+
+        verticalLayout_2->addWidget(algoStopButton);
+
+        label_4 = new QLabel(verticalLayoutWidget);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+
+        verticalLayout_2->addWidget(label_4);
+
+        resultText = new QPlainTextEdit(verticalLayoutWidget);
+        resultText->setObjectName(QString::fromUtf8("resultText"));
+
+        verticalLayout_2->addWidget(resultText);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 956, 25));
+        menuBar->setGeometry(QRect(0, 0, 956, 27));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -231,14 +149,25 @@ public:
         imgLabel->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
         fpsLabel->setText(QApplication::translate("MainWindow", "TextLabel", 0, QApplication::UnicodeUTF8));
         FPS->setText(QApplication::translate("MainWindow", "FPS:", 0, QApplication::UnicodeUTF8));
-        configHeadingLabel->setText(QApplication::translate("MainWindow", "epuck configuration", 0, QApplication::UnicodeUTF8));
-        botLabel->setText(QApplication::translate("MainWindow", "epuck 1", 0, QApplication::UnicodeUTF8));
-        botLabel_2->setText(QApplication::translate("MainWindow", "epuck 2", 0, QApplication::UnicodeUTF8));
-        botLabel_3->setText(QApplication::translate("MainWindow", "epuck 3", 0, QApplication::UnicodeUTF8));
-        botLabel_4->setText(QApplication::translate("MainWindow", "epuck 4", 0, QApplication::UnicodeUTF8));
-        botLabel_5->setText(QApplication::translate("MainWindow", "epuck 5", 0, QApplication::UnicodeUTF8));
-        algoStopButton->setText(QApplication::translate("MainWindow", "Start/Pause", 0, QApplication::UnicodeUTF8));
         algoStartButton->setText(QString());
+        label_3->setText(QApplication::translate("MainWindow", "Options", 0, QApplication::UnicodeUTF8));
+        Algorithm->setText(QApplication::translate("MainWindow", "Algorithm", 0, QApplication::UnicodeUTF8));
+        Activation->setText(QApplication::translate("MainWindow", "Activation", 0, QApplication::UnicodeUTF8));
+        algoComboBox->clear();
+        algoComboBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Mid - Point", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "State based", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Hungarian", 0, QApplication::UnicodeUTF8)
+        );
+        algoActivationComboBox->clear();
+        algoActivationComboBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "One at a time (prob 0)", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "All together (prob 1)", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "50% probability", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Round robin (dining philosopher)", 0, QApplication::UnicodeUTF8)
+        );
+        algoStopButton->setText(QApplication::translate("MainWindow", "Start/Pause", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("MainWindow", "Result", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

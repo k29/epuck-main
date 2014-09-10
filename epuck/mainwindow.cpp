@@ -43,6 +43,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(algoThread, SIGNAL(finished()), algoThread, SLOT(deleteLater()));
 
     connect(this, SIGNAL(stopAlgoThread()), aw, SLOT(onStop()));
+    connect(this, SIGNAL(algoChanged(int)), aw, SLOT(onAlgoChanged(int)));
+    connect(this, SIGNAL(algoActivationChanged(int)), aw, SLOT(onAlgoActivationChanged(int)));
+    connect(aw, SIGNAL(gotResult(QString)), this, SLOT(onGetResult(QString)));
 
     connect(this, SIGNAL(stopAlgo()), aw, SLOT(onStopAlgo()));
 
@@ -97,4 +100,21 @@ void MainWindow::on_algoStopButton_clicked()
 void MainWindow::on_algoStartButton_clicked()
 {
 
+}
+
+void MainWindow::on_algoComboBox_currentIndexChanged(int index)
+{
+    emit algoChanged(index);
+//    qDebug() << index;
+}
+
+void MainWindow::on_algoActivationComboBox_currentIndexChanged(int index)
+{
+    emit algoActivationChanged(index);
+}
+
+
+void MainWindow::onGetResult(QString s)
+{
+    ui->resultText->setPlainText(s);
 }

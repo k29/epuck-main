@@ -1086,6 +1086,7 @@ void AlgoWorker::onTimeout()
         {
 
         case SAVE_CURRENT_POSITION:
+            totDistance = 0.0;
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 savedPosition[i] = cvPoint(localBS.bot[i].x, localBS.bot[i].y);
@@ -1096,6 +1097,7 @@ void AlgoWorker::onTimeout()
         case MOVE_TO_SAVED_POSITION:
         {
             int numCompleted = 0;
+            totDistance = 0.0;
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 if(moveToPoint(savedPosition[i], localBS.bot[i], i))
@@ -1111,7 +1113,7 @@ void AlgoWorker::onTimeout()
         case MAKE_CIRCLE:
         {
 //            qDebug() << "in make circle";
-            totDistance = 0.0;
+
             std::vector<cv::Point> pList;
             cv::Point2f centre;
             float radius;
@@ -1191,12 +1193,28 @@ void AlgoWorker::onTimeout()
             }
             if(numCompleted == NUMBOTS)
             {
-                qDebug() << "Positioning on circle started";
-                currentState = POSITIONING_ON_CIRCLE_1;
-//                sleep(10);
-                numRounds = 0;
-                numActivations = 0;
-                robotActive = 0;
+                bool allOnCircle = true;
+                for(int i = 0; i < NUMBOTS; ++i)
+                {
+                    if(fabs(getDistance(destinationPoint[i], destinationCircle.centre) - destinationCircle.radius) > 5)
+                    {
+                        allOnCircle = false;
+                        break;
+                    }
+                }
+                if(allOnCircle == false)
+                {
+                    currentState = MAKE_CIRCLE;
+                }
+                else
+                {
+                    qDebug() << "Positioning on circle started";
+                    currentState = POSITIONING_ON_CIRCLE_1;
+    //                sleep(10);
+                    numRounds = 0;
+                    numActivations = 0;
+                    robotActive = 0;
+                }
             }
         }
         break;
@@ -1233,7 +1251,10 @@ void AlgoWorker::onTimeout()
                         if(qrand()%2 == 0)
                         {
                             isBotMoving[i] = true;
-                            destinationPoint[i] = getPointToMoveAlgo1(i);
+                            if(currentAlgo == NEW_ALGO)
+                                destinationPoint[i] = getPointNewAlgo(i);
+                            else
+                                destinationPoint[i] = getPointToMoveAlgo1(i);
                             qDebug() << "Bot" << i << "moving";
                         }
                         else
@@ -1241,7 +1262,10 @@ void AlgoWorker::onTimeout()
                     }
                     else if(currentActivationAlgo == PROBABILISTIC_1)
                     {
-                        destinationPoint[i] = getPointToMoveAlgo1(i);
+                        if(currentAlgo == NEW_ALGO)
+                            destinationPoint[i] = getPointNewAlgo(i);
+                        else
+                            destinationPoint[i] = getPointToMoveAlgo1(i);
                         isBotMoving[i] = true;
                     }
                     else
@@ -1251,10 +1275,6 @@ void AlgoWorker::onTimeout()
                 if(currentAlgo == NEW_ALGO)
                 {
                     destinationPoint[robotActive] = getPointNewAlgo(robotActive);
-//                    destinationPoint[robotActive] = cvPoint(localBS.bot[robotActive].x, localBS.bot[robotActive].y);
-//                    int idlist[2];
-//                    getNeighbourIndicesCircle(robotActive, idlist);
-//                    cout << "for " << robotActive << " angle is " << pointToAngle(robotActive)<<endl;
                 }
                 else
                     destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
@@ -1267,8 +1287,6 @@ void AlgoWorker::onTimeout()
                 {
                     state[i] = -1;
                 }
-
-                //-1 = state not set, 1 = moving, 0 = not moving
 
                 state[robotActive] = 1;
                 isBotMoving[robotActive] = true;
@@ -1405,14 +1423,22 @@ void AlgoWorker::onTimeout()
 
         break;
         case FINISHED:
+            QString s;
+            s = QString("Number of activations: ") + QString::number(numActivations) + "\n";
+            s += "Number of rounds: " + QString::number(numRounds) + "\n";
+            s += "Total distance: " + QString::number((int)totDistance) + "\n";
+            qDebug() << s;
+            emit gotResult(s);
 //            qDebug() << "Finished";
-             qDebug() << "Number of activations: " << numActivations;
-             qDebug() << "Number of rounds: " << numRounds;
-             qDebug() << "Total Distance: " << totDistance;
-             sleep(1);
+//             qDebug() << "Number of activations: " << numActivations;
+//             qDebug() << "Number of rounds: " << numRounds;
+//             qDebug() << "Total Distance: " << totDistance;
+//             sleep(5);
             moveStopAll();
             currentState = MOVE_TO_SAVED_POSITION;
-            currentAlgo = (Algorithm) (((int)currentAlgo + 1)%((int)END_ALGO));
+            isRunning = false;
+
+//            currentAlgo = (Algorithm) (((int)currentAlgo + 1)%((int)END_ALGO));
             break;
 
         }
@@ -1429,7 +1455,7 @@ void AlgoWorker::onTimeout()
 //    usleep(100000);
 //    qDebug()<< "starting next iteration";
     timer->setSingleShot(true);
-    timer->start(100);
+    timer->start(10);
 //    nextIteration();
 }
 
@@ -1581,6 +1607,17 @@ void AlgoWorker::onStopAlgo()
 
     //add code for stopping all robots
     moveStopAll();
+}
+
+void AlgoWorker::onAlgoChanged(int index)
+{
+    currentAlgo = (Algorithm) index;
+}
+
+void AlgoWorker::onAlgoActivationChanged(int index)
+{
+//    qDebug() << "changed";
+    currentActivationAlgo = (ActivationAlgorithm) index;
 }
 
 void AlgoWorker::turnLedOn(int n)

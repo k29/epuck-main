@@ -42,12 +42,15 @@ public slots:
     void onTimeout();
     void onStop();
     void onStopAlgo();
+    void onAlgoChanged(int index);
+    void onAlgoActivationChanged(int index);
 signals:
     void gotLine(int x1, int y1, int x2, int y2);
     void printDestination(PointList p);
     void printCircle(Circle c);
     void finished();
     void error(QString err);
+    void gotResult(QString s);
 
 
 private:
