@@ -90,7 +90,7 @@ void CameraWorker::onTimeout()
     }
     if(isDestinationPresent)
     {
-        for(int i = 0; i < 5; ++i)
+        for(int i = 0; i < NUMBOTS; ++i)
         {
             cvCircle(cc->rgbimg, destinationPoint[i], 3, cvScalar(0,0,0), 3);
             cvCircle(cc->rgbimg, destinationPoint[i], 1, cvScalar(255,255,255), 3);
@@ -149,7 +149,7 @@ void CameraWorker::onGotLine(int x1, int y1, int x2, int y2)
 void CameraWorker::onPrintDestination(PointList p)
 {
     isDestinationPresent = true;
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < NUMBOTS; ++i)
     {
         destinationPoint[i] = p.p[i];
     }

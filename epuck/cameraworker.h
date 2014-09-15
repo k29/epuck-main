@@ -50,7 +50,7 @@ private:
     BeliefState** bs;
     bool isLinePresent;
     CvPoint linePoint[2];
-    CvPoint destinationPoint[5];
+    CvPoint destinationPoint[NUMBOTS];
     Circle circle;
     bool isDestinationPresent;
     bool isCirclePresent;

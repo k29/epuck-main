@@ -12,6 +12,7 @@
 #include "featuredetection.h"
 #include "commondefs.h"
 #include "hungarian.h"
+#include <fstream>
 
 
 //non simulation values
@@ -30,7 +31,7 @@
 
 enum AlgoState {SAVE_CURRENT_POSITION, MOVE_TO_SAVED_POSITION, MAKE_CIRCLE, MOVE_TO_CIRCLE, POSITIONING_ON_CIRCLE_1, POSITIONING_ON_CIRCLE_2, FINISHED, CALCULATE_POINTS_HUNGARIAN, MOVE_TO_POINTS};
 enum Algorithm {MIDPOINT, NEW_ALGO, LYNDON, END_ALGO};
-enum ActivationAlgorithm {PROBABILISTIC_0, PROBABILISTIC_1, PROBABILISTIC_HALF, DINING_PHILOSOPHER};
+enum ActivationAlgorithm {PROBABILISTIC_0, PROBABILISTIC_1, PROBABILISTIC_HALF, PROBABILISTIC_QUARTER, DINING_PHILOSOPHER };
 enum MoveDirection {FORWARD, BACKWARD, LEFT, RIGHT, STOP};
 class AlgoWorker : public QObject
 {
@@ -99,8 +100,8 @@ private:
     CvPoint savedPosition[NUMBOTS];
     Circle destinationCircle;
     int robotActive;
-    bool moveToPoint(CvPoint p, Bot bot, int n);
-    bool moveToPointOpti(CvPoint p, Bot bot, int n);
+    bool moveToPoint(CvPoint p, Bot &bot, int n);
+    bool moveToPointOpti(CvPoint p, Bot &bot, int n);
     bool turnToPoint(CvPoint p, Bot bot, int n);
     int frameCounter;
     bool isRunning;
@@ -124,7 +125,7 @@ private:
     CvPoint getPointToMoveAlgo1(int n);
     CvPoint getPerpPointOnCircleCloserToBot(CvPoint p, int n);
     CvPoint getMidOfNeighbours(int n);
-    CvPoint getPointNewAlgo(int n);
+    CvPoint getPointNewAlgo(int n, bool closer = true);
     double pointToAngle(CvPoint p);
     double pointToAngle(int n);
     CvPoint angleToPoint(double angle);
@@ -142,6 +143,9 @@ private:
     bool isIntersecting(LineSegment s1, LineSegment s2);
     CvPoint lineLineSegmentCircleIntersect(CvPoint centre, double radius, LineSegment s);
     CvPoint getDestinationVoronoi(int n);
+    int globalCounter;
+    CvPoint savePositionNew[10][NUMBOTS];
+    std::fstream result;
 };
 
 #endif // ALGOWORKER_H

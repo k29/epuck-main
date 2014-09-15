@@ -1,0 +1,50 @@
+Number of activations: 162
+Number of rounds: 17
+Total distance: 2612
+
+
+Number of activations: 177
+Number of rounds: 15
+Total distance: 2767
+
+
+Number of activations: 99
+Number of rounds: 10
+Total distance: 2216
+
+
+Number of activations: 113
+Number of rounds: 10
+Total distance: 2875
+
+
+Number of activations: 116
+Number of rounds: 11
+Total distance: 2317
+
+
+Number of activations: 33
+Number of rounds: 3
+Total distance: 1979
+
+
+Number of activations: 38
+Number of rounds: 4
+Total distance: 1527
+
+
+Number of activations: 101
+Number of rounds: 9
+Total distance: 2225
+
+
+Number of activations: 323
+Number of rounds: 31
+Total distance: 4466
+
+
+Number of activations: 50
+Number of rounds: 5
+Total distance: 1894
+
+
