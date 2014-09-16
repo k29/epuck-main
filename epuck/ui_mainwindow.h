@@ -55,7 +55,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(956, 556);
+        MainWindow->resize(988, 557);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         imgLabel = new QLabel(centralWidget);
@@ -74,7 +74,7 @@ public:
         algoStartButton->setGeometry(QRect(760, 420, 98, 27));
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(660, 50, 281, 267));
+        verticalLayoutWidget->setGeometry(QRect(660, 50, 312, 267));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -129,7 +129,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 956, 27));
+        menuBar->setGeometry(QRect(0, 0, 988, 27));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -157,7 +157,7 @@ public:
         algoComboBox->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "Mid - Point", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "State based", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "Hungarian", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Lyndon words", 0, QApplication::UnicodeUTF8)
         );
         algoActivationComboBox->clear();
         algoActivationComboBox->insertItems(0, QStringList()
