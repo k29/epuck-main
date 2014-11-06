@@ -4,8 +4,10 @@
 #include <opencv2/opencv.hpp>
 
 //enum Command {FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN, STOP, SPEED1, SPEED2, SPEED3, SPEED4, F_PULSE, B_PULSE, L_PULSE, R_PULSE};
-#define NUMBOTS 10
+#define NUMBOTS 2
 #define SIMULATION 1
+#define NODE_ROWS 10
+#define NODE_COLS 10
 //plz to store angle in radians
 struct Bot
 {
@@ -21,14 +23,59 @@ public:
     CvPoint p[NUMBOTS];
 };
 
-class Circle
-{
-public:
-    cv::Point2f centre;
-    float radius;
-};
+
 
 #define BLOB_MIN_AREA 100
+#define unit (10)
+
+struct Position
+{
+    double x;
+    double y;
+};
+
+struct Circle
+{
+    Position center;
+    double radius;
+    Circle()
+    {
+
+    }
+    Circle(Position center,double radius)
+    {
+        this->center=center;
+
+        this->radius=radius;
+    }
+};
+
+
+struct Robot
+{
+
+    /* insert parameters here */
+
+    /* visibility range */
+    double visibilityRadius;
+    double width;
+    double angle;
+    int id;
+    Position currentPosition;
+
+    Robot()
+    {
+        visibilityRadius = 2*unit;
+        width=unit;
+    }
+
+    Circle getVisibilityCircle()
+    {
+        return Circle(currentPosition,visibilityRadius);
+    }
+};
+
+
 
 
 #endif

@@ -4,6 +4,7 @@
 #include "QThread"
 #include "fstream"
 #include <algorithm>
+#include "ComputeDestination.hpp"
 
 using namespace std;
 
@@ -55,11 +56,11 @@ void AlgoWorker::process()
 //    cout << "time " << now.msec();
     qDebug() << "Algo Worker thread started.";
     frameCounter = 0;
-    isRunning = false;
+//    isRunning = false;
     currentState = MOVE_TO_SAVED_POSITION;
-    currentAlgo = NEW_ALGO;
+    currentAlgo = NODE_COUNTING;
     currentActivationAlgo = PROBABILISTIC_0;
-    result.open("output10STATE.txt", ios::out);
+    result.open("output5STATE-REAL.txt", ios::out);
     robotActive = 0;
     for(int i = 0; i < NUMBOTS; ++i)
     {
@@ -83,7 +84,7 @@ void AlgoWorker::process()
 #endif
 #ifdef SIMULATION
 //    fstream f1;
-//    f1.open("positions10.txt", ios::out);
+//    f1.open("positions20.txt", ios::out);
     for(int i = 0; i < 10; ++i)
     {
         for(int i = 0; i < NUMBOTS; ++i)
@@ -98,9 +99,8 @@ void AlgoWorker::process()
 //    f1.close();
 
 
-
         fstream f2;
-        f2.open("positions10.txt", ios::in);
+        f2.open("positions5.txt", ios::in);
         for(int j =0; j < 10; ++j)
         {
             for(int i = 0; i < NUMBOTS; ++i)
@@ -111,6 +111,20 @@ void AlgoWorker::process()
         }
         f2.close();
 #endif
+    for(int i = 0; i < NODE_ROWS; ++i)
+    {
+        for(int j = 0; j < NODE_COLS; ++j)
+        {
+            localBS.node[i][j] = 0;
+        }
+    }
+    localBS.node[5][5] = -1;
+    localBS.node[5][6] = -1;
+
+    gridPosition[0] = cvPoint(7,7);
+    gridPosition[1] = cvPoint(3, 5);
+
+
     globalCounter = 0;
     globalCounter2 = 0;
     qDebug() << "Ok\n";
@@ -169,11 +183,11 @@ bool AlgoWorker::turnToPoint(CvPoint p, Bot bot, int n)
 bool AlgoWorker::moveToPoint(CvPoint p, Bot &bot, int n)
 {
 #ifdef SIMULATION
-    bot.x = p.x;
-    bot.y = p.y;
-    return true;
-#endif
-#ifndef SIMULATION
+//    bot.x = p.x;
+//    bot.y = p.y;
+//    return true;
+//#endif
+//#ifndef SIMULATION
     double angleTowardPoint = atan2(p.y - bot.y, p.x - bot.x) - bot.angle;
     while(angleTowardPoint > CV_PI)
         angleTowardPoint -= 2*CV_PI;
@@ -234,11 +248,11 @@ bool AlgoWorker::moveToPoint(CvPoint p, Bot &bot, int n)
 bool AlgoWorker::moveToPointOpti(CvPoint p, Bot &bot, int n)
 {
 #ifdef SIMULATION
-    bot.x = p.x;
-    bot.y = p.y;
-    return true;
-#endif
-#ifndef SIMULATION
+//    bot.x = p.x;
+//    bot.y = p.y;
+//    return true;
+//#endif
+//#ifndef SIMULATION
     double angleTowardPoint = atan2(p.y - bot.y, p.x - bot.x) - bot.angle;
     while(angleTowardPoint > CV_PI)
         angleTowardPoint -= 2*CV_PI;
@@ -401,7 +415,7 @@ CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
     double angle[NUMBOTS];
     for(int i = 0; i < NUMBOTS; ++i)
     {
-        angle[i] = atan2((double)localBS.bot[i].y - destinationCircle.centre.y,(double) localBS.bot[i].x - destinationCircle.centre.x);
+        angle[i] = atan2((double)localBS.bot[i].y - destinationCircle.center.y,(double) localBS.bot[i].x - destinationCircle.center.x);
         if(angle[i] < 0)
         {
             angle[i] += 2*CV_PI;
@@ -438,11 +452,11 @@ CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
 
 
     cv::Point2f a[2];
-    a[0].x = destinationCircle.centre.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2);
-    a[0].y = destinationCircle.centre.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2);
+    a[0].x = destinationCircle.center.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2);
+    a[0].y = destinationCircle.center.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2);
 
-    a[1].x = destinationCircle.centre.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2 + CV_PI);
-    a[1].y = destinationCircle.centre.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2 + CV_PI);
+    a[1].x = destinationCircle.center.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2 + CV_PI);
+    a[1].y = destinationCircle.center.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2 + CV_PI);
 
 
     //p1 and p2 are neighbours of bot
@@ -454,11 +468,11 @@ CvPoint AlgoWorker::getPointToMoveAlgo1(int n)
 //    a[0] = getPerpPointOnCircle(mid, true);
 //    a[1] = getPerpPointOnCircle(mid, false);
 //    //a1 and a2 are 2 points to choose from.
-//    //choose the one which makes acute angle from centre to bot
-    double botAngle = atan2(localBS.bot[n].y - destinationCircle.centre.y, localBS.bot[n].x - destinationCircle.centre.x);
+//    //choose the one which makes acute angle from center to bot
+    double botAngle = atan2(localBS.bot[n].y - destinationCircle.center.y, localBS.bot[n].x - destinationCircle.center.x);
     for(int i = 0; i < 2; ++i)
     {
-        angleFromCentre[i] = atan2(a[i].y - destinationCircle.centre.y, a[i].x - destinationCircle.centre.x);
+        angleFromCentre[i] = atan2(a[i].y - destinationCircle.center.y, a[i].x - destinationCircle.center.x);
         angleFromCentre[i] -= botAngle;
         while(angleFromCentre[i] < -CV_PI)
             angleFromCentre[i] += 2*CV_PI;
@@ -492,7 +506,7 @@ CvPoint AlgoWorker::getMidOfNeighbours(int n)
     double angle[NUMBOTS];
     for(int i = 0; i < NUMBOTS; ++i)
     {
-        angle[i] = atan2((double)localBS.bot[i].y - destinationCircle.centre.y, (double)localBS.bot[i].x - destinationCircle.centre.x);
+        angle[i] = atan2((double)localBS.bot[i].y - destinationCircle.center.y, (double)localBS.bot[i].x - destinationCircle.center.x);
         if(angle[i] < 0)
         {
             angle[i] += 2*CV_PI;
@@ -526,11 +540,11 @@ CvPoint AlgoWorker::getMidOfNeighbours(int n)
 
 
     cv::Point2f a[2];
-    a[0].x = destinationCircle.centre.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2);
-    a[0].y = destinationCircle.centre.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2);
+    a[0].x = destinationCircle.center.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2);
+    a[0].y = destinationCircle.center.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2);
 
-    a[1].x = destinationCircle.centre.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2 + CV_PI);
-    a[1].y = destinationCircle.centre.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2 + CV_PI);
+    a[1].x = destinationCircle.center.x + destinationCircle.radius*cos((angle[m[0]] + angle[m[1]])/2 + CV_PI);
+    a[1].y = destinationCircle.center.y + destinationCircle.radius*sin((angle[m[0]] + angle[m[1]])/2 + CV_PI);
 
 
     //p1 and p2 are neighbours of bot
@@ -542,11 +556,11 @@ CvPoint AlgoWorker::getMidOfNeighbours(int n)
 //    a[0] = getPerpPointOnCircle(mid, true);
 //    a[1] = getPerpPointOnCircle(mid, false);
 //    //a1 and a2 are 2 points to choose from.
-//    //choose the one which makes acute angle from centre to bot
-    double botAngle = atan2(localBS.bot[n].y - destinationCircle.centre.y, localBS.bot[n].x - destinationCircle.centre.x);
+//    //choose the one which makes acute angle from center to bot
+    double botAngle = atan2(localBS.bot[n].y - destinationCircle.center.y, localBS.bot[n].x - destinationCircle.center.x);
     for(int i = 0; i < 2; ++i)
     {
-        angleFromCentre[i] = atan2(a[i].y - destinationCircle.centre.y, a[i].x - destinationCircle.centre.x);
+        angleFromCentre[i] = atan2(a[i].y - destinationCircle.center.y, a[i].x - destinationCircle.center.x);
         angleFromCentre[i] -= botAngle;
         while(angleFromCentre[i] < -CV_PI)
             angleFromCentre[i] += 2*CV_PI;
@@ -571,28 +585,28 @@ CvPoint AlgoWorker::getMidOfNeighbours(int n)
 CvPoint AlgoWorker::getPerpPointOnCircle(CvPoint p, bool closer)
 {
     cv::Point2f p1, p2;
-    cv::Point2f centre = destinationCircle.centre;
+    cv::Point2f center = cvPoint(destinationCircle.center.x, destinationCircle.center.y);
     double radius = destinationCircle.radius;
 //    qDebug() << p.x << p.y;
-    if(p.x != centre.x)
+    if(p.x != center.x)
     {
-        double slope = ((double)p.y - (double)centre.y)/((double)p.x - (double)centre.x);
-        p1.x = (double)centre.x + radius*sqrt(1.0/(slope*slope + 1));
-        p1.y = (double)centre.y + slope*(p1.x - centre.x);
-        p2.x = (double)centre.x - radius*sqrt(1.0/(slope*slope + 1));
-        p2.y = (double)centre.y + slope*(p2.x - centre.x);
+        double slope = ((double)p.y - (double)center.y)/((double)p.x - (double)center.x);
+        p1.x = (double)center.x + radius*sqrt(1.0/(slope*slope + 1));
+        p1.y = (double)center.y + slope*(p1.x - center.x);
+        p2.x = (double)center.x - radius*sqrt(1.0/(slope*slope + 1));
+        p2.y = (double)center.y + slope*(p2.x - center.x);
     }
     else
     {
-        p1.x = centre.x;
-        p1.y = centre.y + radius;
-        p2.x = centre.x;
-        p2.y = centre.y - radius;
+        p1.x = center.x;
+        p1.y = center.y + radius;
+        p2.x = center.x;
+        p2.y = center.y - radius;
     }
 
 //    qDebug() << "Point: X:" << p2.x << "Y: " << p2.y;
 //    qDebug() << "Point: X:" << p1.x << "Y: " << p1.y;
-//    qDebug() << "Centre: " << centre.x << centre.y;
+//    qDebug() << "center: " << center.x << center.y;
 //    qDebug() << "Radius:" << radius;
     if(closer)
     {
@@ -613,22 +627,22 @@ CvPoint AlgoWorker::getPerpPointOnCircle(CvPoint p, bool closer)
 CvPoint AlgoWorker::getPerpPointOnCircleCloserToBot(CvPoint p, int n)
 {
     CvPoint p1, p2;
-    cv::Point2f centre = destinationCircle.centre;
+    cv::Point2f center = cvPoint(destinationCircle.center.x, destinationCircle.center.y);
     double radius = destinationCircle.radius;
-    if(p.x != centre.x)
+    if(p.x != center.x)
     {
-        double slope = ((double)p.y - (double)centre.y)/((double)p.x - (double)centre.x);
-        p1.x = centre.x + radius*sqrt(1.0/(slope*slope + 1));
-        p1.y = centre.y + slope*(p1.x - centre.x);
-        p2.x = centre.x - radius*sqrt(1.0/(slope*slope + 1));
-        p2.y = centre.y + slope*(p2.x - centre.x);
+        double slope = ((double)p.y - (double)center.y)/((double)p.x - (double)center.x);
+        p1.x = center.x + radius*sqrt(1.0/(slope*slope + 1));
+        p1.y = center.y + slope*(p1.x - center.x);
+        p2.x = center.x - radius*sqrt(1.0/(slope*slope + 1));
+        p2.y = center.y + slope*(p2.x - center.x);
     }
     else
     {
-        p1.x = centre.x;
-        p1.y = centre.y +radius;
-        p2.x = centre.x;
-        p2.y = centre.y - radius;
+        p1.x = center.x;
+        p1.y = center.y +radius;
+        p2.x = center.x;
+        p2.y = center.y - radius;
     }
     CvPoint botLocation = cvPoint(localBS.bot[n].x, localBS.bot[n].y);
     if(getDistance(p1, botLocation) < getDistance(p2, botLocation))
@@ -648,7 +662,7 @@ void AlgoWorker::getNeighbourIndicesCircle(int n, int* indexList)
     double angle[NUMBOTS];
     for(int i = 0; i < NUMBOTS; ++i)
     {
-        angle[i] = atan2(localBS.bot[i].y - destinationCircle.centre.y, localBS.bot[i].x - destinationCircle.centre.x);
+        angle[i] = atan2(localBS.bot[i].y - destinationCircle.center.y, localBS.bot[i].x - destinationCircle.center.x);
         if(angle[i] < 0)
         {
             angle[i] += 2*CV_PI;
@@ -862,14 +876,14 @@ If robot is in no stable state
 CvPoint AlgoWorker::angleToPoint(double angle)
 {
     CvPoint p;
-    p.x = destinationCircle.centre.x + cos(angle)*destinationCircle.radius;
-    p.y = destinationCircle.centre.y + sin(angle)*destinationCircle.radius;
+    p.x = destinationCircle.center.x + cos(angle)*destinationCircle.radius;
+    p.y = destinationCircle.center.y + sin(angle)*destinationCircle.radius;
     return p;
 }
 
 double AlgoWorker::pointToAngle(CvPoint p)
 {
-    double angle = atan2(p.y - destinationCircle.centre.y, p.x - destinationCircle.centre.x);
+    double angle = atan2(p.y - destinationCircle.center.y, p.x - destinationCircle.center.x);
     if(angle < 0)
     {
         angle += 2*CV_PI;
@@ -971,12 +985,12 @@ bool AlgoWorker::isIntersecting(LineSegment s1, LineSegment s2)
 }
 
 
-CvPoint AlgoWorker::lineLineSegmentCircleIntersect(CvPoint centre, double radius, LineSegment s)
+CvPoint AlgoWorker::lineLineSegmentCircleIntersect(CvPoint center, double radius, LineSegment s)
 {
     double a = s.x1 - s.x2;
-    double b = s.x2 - centre.x;
+    double b = s.x2 - center.x;
     double c = s.y1 - s.y2;
-    double d = s.y2 - centre.y;
+    double d = s.y2 - center.y;
     double discriminantSquare = (2.*a*b + 2.*c*d)*(2.*a*b + 2.*c*d) - 4.*(a*a + c*c)*(b*b + d*d - radius*radius);
     if(discriminantSquare < 0)
     {
@@ -1017,7 +1031,7 @@ CvPoint AlgoWorker::lineLineSegmentCircleIntersect(CvPoint centre, double radius
 CvPoint AlgoWorker::getDestinationVoronoi(int n)
 {
     int numIntersections = 0;
-    if(fabs(getDistance(cvPoint(localBS.bot[n].x, localBS.bot[n].y), destinationCircle.centre) - destinationCircle.radius) < 10)
+    if(fabs(getDistance(cvPoint(localBS.bot[n].x, localBS.bot[n].y), cvPoint(destinationCircle.center.x, destinationCircle.center.y)) - destinationCircle.radius) < 10)
         return cvPoint(localBS.bot[n].x, localBS.bot[n].y);
     CvPoint finalPoints[2];
     for (int i = 0; i < ls.size() && numIntersections < 2; ++i)
@@ -1037,7 +1051,7 @@ CvPoint AlgoWorker::getDestinationVoronoi(int n)
         if(isPartOfCell)
         {
 //            cvLine(img, cvPoint(ls[i].x1, ls[i].y1), cvPoint(ls[i].x2, ls[i].y2), cvScalar(255, 255, 0), 3);
-            CvPoint p = lineLineSegmentCircleIntersect(destinationCircle.centre, destinationCircle.radius, ls[i]);
+            CvPoint p = lineLineSegmentCircleIntersect(cvPoint(destinationCircle.center.x, destinationCircle.center.y), destinationCircle.radius, ls[i]);
             if(p.x != -999 && p.y != -999)
             {
                 finalPoints[numIntersections] = p;
@@ -1088,14 +1102,14 @@ CvPoint AlgoWorker::getDestinationVoronoi(int n)
             {
                 CvPoint p1 = cvPoint(ls[i].x1, ls[i].y1);
                 CvPoint p2 = cvPoint(ls[i].x2, ls[i].y2);
-                double distance = getDistance(p1, destinationCircle.centre);
-                if(fabs(distance - destinationCircle.radius) < minDistance && getDistance(p1, destinationCircle.centre) < destinationCircle.radius)
+                double distance = getDistance(p1, cvPoint(destinationCircle.center.x, destinationCircle.center.y));
+                if(fabs(distance - destinationCircle.radius) < minDistance && getDistance(p1, cvPoint(destinationCircle.center.x, destinationCircle.center.y)) < destinationCircle.radius)
                 {
                     minDistance = fabs(distance - destinationCircle.radius);
                     ans = p1;
                 }
-                distance = getDistance(p2, destinationCircle.centre);
-                if(fabs(distance - destinationCircle.radius) < minDistance && getDistance(p2, destinationCircle.centre) < destinationCircle.radius)
+                distance = getDistance(p2, cvPoint(destinationCircle.center.x, destinationCircle.center.y));
+                if(fabs(distance - destinationCircle.radius) < minDistance && getDistance(p2, cvPoint(destinationCircle.center.x, destinationCircle.center.y)) < destinationCircle.radius)
                 {
                     minDistance = fabs(distance - destinationCircle.radius);
                     ans = p2;
@@ -1104,7 +1118,7 @@ CvPoint AlgoWorker::getDestinationVoronoi(int n)
         }
 //        qDebug () << ans.x << " " << ans.y;
 //        qDebug () << localBS.bot[n].x <<" "<< localBS.bot[n].y;
-//        if(getDistance(ans, destinationCircle.centre) > destinationCircle.radius + 5)
+//        if(getDistance(ans, cvPoint(destinationCircle.center.x, destinationCircle.center.y)) > destinationCircle.radius + 5)
 //        {
 //            qDebug() <<"PROBLEM IN " << n;
 //            sleep(100);
@@ -1167,7 +1181,96 @@ void AlgoWorker::onTimeout()
 //    if(isBSAvailable)
 //     qDebug() << "Y222OOOOOOOOOOO";
 //    qDebug() << avail3;
-    if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
+    if(currentAlgo == NODE_COUNTING)
+    {
+        for(int i = 0; i < NUMBOTS; ++i)
+        {
+            savePositionNew[0][i] = cvPoint(gridPosition[i].y*(640/NODE_COLS) + (320/NODE_COLS),
+                                            gridPosition[i].x*(480/NODE_ROWS) + (320/NODE_ROWS));
+        }
+        if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
+        {
+            switch(currentState)
+            {
+                case MOVE_TO_SAVED_POSITION:
+                {
+                    int numCompleted = 0;
+                    totDistance = 0.0;
+                    numRounds = 0;
+                    numActivations = 0;
+                    for(int i = 0; i < NUMBOTS; ++i)
+                    {
+                        if(moveToPoint(savePositionNew[globalCounter][i], localBS.bot[i], i))
+                            numCompleted++;
+                    }
+                    if(numCompleted == NUMBOTS)
+                    {
+//                        qDebug() << "Reached random points";
+                        currentState = FINISHED;
+                    }
+                }
+                break;
+                case FINISHED:
+                {
+                    for(int i = 0; i < NUMBOTS; ++i)
+                    {
+                        int row = gridPosition[i].y;
+                        int col = gridPosition[i].x;
+                        int minRow = -1, minCol = -1;
+                        int minVal = 999999;
+
+                        if(row > 0)
+                        {
+                            if(localBS.node[row-1][col] < minVal && localBS.node[row-1][col] >= 0)
+                            {
+                                minRow = row-1;
+                                minCol = col;
+                                minVal = localBS.node[row-1][col];
+                            }
+                        }
+
+                        if(col > 0)
+                        {
+                            if(localBS.node[row][col-1] < minVal && localBS.node[row][col-1] >= 0)
+                            {
+                                minRow = row;
+                                minCol = col-1;
+                                minVal = localBS.node[row][col-1];
+                            }
+                        }
+
+                        if(row < NODE_ROWS-1)
+                        {
+                            if(localBS.node[row+1][col] < minVal && localBS.node[row+1][col] >= 0)
+                            {
+                                minRow = row+1;
+                                minCol = col;
+                                minVal = localBS.node[row+1][col];
+                            }
+                        }
+
+                        if(col < NODE_COLS-1)
+                        {
+                            if(localBS.node[row][col+1] < minVal && localBS.node[row][col+1] >= 0)
+                            {
+                                minRow = row;
+                                minCol = col+1;
+                                minVal = localBS.node[row][col+1];
+                            }
+                        }
+
+                        localBS.node[minRow][minCol]++;
+                        gridPosition[i] = cvPoint(minCol, minRow);
+                    }
+                    currentState = MOVE_TO_SAVED_POSITION;
+                }
+                break;
+            }
+        }
+        else
+            moveStopAll();
+    }
+    else if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
     {
 //        qDebug() << "YOOOOOOOOOOO\n";
 
@@ -1208,15 +1311,16 @@ void AlgoWorker::onTimeout()
 //            qDebug() << "in make circle";
 
             std::vector<cv::Point> pList;
-            cv::Point2f centre;
+            cv::Point2f center;
             float radius;
             for(int i=0; i < NUMBOTS; ++i)
             {
                 pList.push_back(cv::Point(localBS.bot[i].x, localBS.bot[i].y));
             }
-            cv::minEnclosingCircle(pList, centre, radius);
-            destinationCircle.centre = centre;
-//            qDebug() << centre.x << centre.y;
+            cv::minEnclosingCircle(pList, center, radius);
+            destinationCircle.center.x = center.x;
+            destinationCircle.center.y = center.y;
+//            qDebug() << center.x << center.y;
             destinationCircle.radius = radius;
             emit printCircle(destinationCircle);
             ls.clear();
@@ -1268,6 +1372,9 @@ void AlgoWorker::onTimeout()
 //            if(currentAlgo == LYNDON)
 //                currentState = CALCULATE_POINTS_HUNGARIAN;
 //            else
+            if(currentAlgo == FAT_ROBOTS)
+                currentState = POSITIONING_ON_CIRCLE_1;
+            else
                 currentState = MOVE_TO_CIRCLE;
             for(int i = 0; i<NUMBOTS; ++i)
             {
@@ -1281,6 +1388,7 @@ void AlgoWorker::onTimeout()
         case MOVE_TO_CIRCLE:
         {
             int numCompleted = 0;
+            myTimer.start();
             for(int i = 0; i < NUMBOTS; ++i)
             {
                 if(moveToPoint(destinationPoint[i], localBS.bot[i], i))
@@ -1291,7 +1399,7 @@ void AlgoWorker::onTimeout()
                 bool allOnCircle = true;
                 for(int i = 0; i < NUMBOTS; ++i)
                 {
-                    if(fabs(getDistance(destinationPoint[i], destinationCircle.centre) - destinationCircle.radius) > FINAL_REACHED_THRESHOLD)
+                    if(fabs(getDistance(destinationPoint[i], cvPoint(destinationCircle.center.x, destinationCircle.center.y)) - destinationCircle.radius) > FINAL_REACHED_THRESHOLD)
                     {
                         allOnCircle = false;
                         break;
@@ -1316,6 +1424,8 @@ void AlgoWorker::onTimeout()
         }
         break;
 
+
+
         case POSITIONING_ON_CIRCLE_1:
         {
 //            qDebug() << "New Iteration Start.";
@@ -1330,7 +1440,7 @@ void AlgoWorker::onTimeout()
                     angleFormed += 2*CV_PI;
                 while(angleFormed > 2*CV_PI)
                     angleFormed -= 2*CV_PI;
-                if(fabs(angleFormed - stableAngle) > 10.0*CV_PI/180.0)
+                if(fabs(angleFormed - stableAngle) > 20.0*CV_PI/180.0)
 //                if(getDistance(dest, cvPoint(localBS.bot[i].x, localBS.bot[i].y)) > FINAL_REACHED_THRESHOLD)
                 {
                     isFinalPositionReached = false;
@@ -1355,21 +1465,12 @@ void AlgoWorker::onTimeout()
                         if(qrand()%2 == 0)
                         {
                             isBotMoving[i] = true;
-                            if(currentAlgo == NEW_ALGO)
-                                destinationPoint[i] = getPointNewAlgo(i);
-                            else
-                                destinationPoint[i] = getPointToMoveAlgo1(i);
-                            qDebug() << "Bot" << i << "moving";
                         }
                         else
                             isBotMoving[i] = false;
                     }
                     else if(currentActivationAlgo == PROBABILISTIC_1)
                     {
-                        if(currentAlgo == NEW_ALGO)
-                            destinationPoint[i] = getPointNewAlgo(i);
-                        else
-                            destinationPoint[i] = getPointToMoveAlgo1(i);
                         isBotMoving[i] = true;
                     }
                     else if(currentActivationAlgo == PROBABILISTIC_QUARTER)
@@ -1377,50 +1478,102 @@ void AlgoWorker::onTimeout()
                         if(qrand()%4 == 0)
                         {
                             isBotMoving[i] = true;
-                            if(currentAlgo == NEW_ALGO)
-                                destinationPoint[i] = getPointNewAlgo(i);
-                            else
-                                destinationPoint[i] = getPointToMoveAlgo1(i);
-                            qDebug() << "Bot" << i << "moving";
                         }
                         else
                             isBotMoving[i] = false;
                     }
                     else
                         isBotMoving[i] = false;
-
-                }
-                if(currentAlgo == NEW_ALGO)
+                }               
+                isBotMoving[robotActive] = true;
+            }          
+            else if(currentActivationAlgo == DINING_PHILOSOPHER)
+            {
+                int state[NUMBOTS];
+                for(int i = 0; i < NUMBOTS; ++i)
                 {
-                    destinationPoint[robotActive] = getPointNewAlgo(robotActive);
-                    isBotMoving[robotActive] = true;
-                    int numStuckCount = 0;
+                    state[i] = -1;
+                }
+                for(int i = 0; i < NUMBOTS; ++i)
+                {
+                    isBotMoving[i] = false;
+                }
+                if(numRounds == 0)
+                {
+                    lastRobot = 0;
+                }
+//                state[robotActive] = 1;
+//                isBotMoving[robotActive] = true;
+                int n = lastRobot;
+                bool flag = false;
+                isBotMoving[n] = true;
+                for(int i = 0; i < NUMBOTS - 1; ++i)
+                {
+                    n = getCWNeighbour(n);
+                    if(flag)
+                    {
+                        flag = false;
+                        isBotMoving[n] = true;
+                    }
+                    else
+                    {
+                        lastRobot = n;
+                        flag = true;
+                    }
+                }
+//                for(int i = 0; i < NUMBOTS; ++i)
+//                {
+//                    int indexList[2];
+//                    getNeighbourIndicesCircle(i, indexList);
+//                    if(state[i] == -1)
+//                    {
+//                        if(state[indexList[0]] == 1 || state[indexList[1]] == 1)
+//                        {
+//                            state[i] = 0;
+//                            isBotMoving[i] = false;
+//                        }
+//                        else
+//                        {
+//                            state[i] = 1;
+//                            isBotMoving[i] = true;
+//                        }
+//                    }
+//                }
+            }
+
+            if(currentAlgo == NEW_ALGO)
+            {
+                destinationPoint[robotActive] = getPointNewAlgo(robotActive);
+                for(int i = 0; i < 5; ++i)
+                    destinationPoint[i] = getPointNewAlgo(i);
+                isBotMoving[robotActive] = true;
+                int numStuckCount = 0;
+                for(int i = 0; i < NUMBOTS; ++i)
+                {
+                    if(getDistance(cvPoint(localBS.bot[i].x, localBS.bot[i].y), getPointNewAlgo(i)) < 10)
+                    {
+                        numStuckCount++;
+                    }
+                }
+                if(numStuckCount == NUMBOTS)
+                {
+                    qDebug() << "REACHED DEADLOCK";
+//                        std::vector<int> canMove;
+                    double largestAngle = 0;
+                    int robotLargestAngle;
                     for(int i = 0; i < NUMBOTS; ++i)
                     {
-                        if(getDistance(cvPoint(localBS.bot[i].x, localBS.bot[i].y), getPointNewAlgo(i)) < 10)
+                        double angleFormed = pointToAngle(getCWNeighbour(i)) - pointToAngle(i);
+                        while(angleFormed < 0)
+                            angleFormed += 2*CV_PI;
+                        while(angleFormed > 2*CV_PI)
+                            angleFormed -= 2*CV_PI;
+                        if(angleFormed > largestAngle)
                         {
-                            numStuckCount++;
+                            largestAngle = angleFormed;
+                            robotLargestAngle = i;
                         }
                     }
-                    if(numStuckCount == NUMBOTS)
-                    {
-                        qDebug() << "REACHED DEADLOCK";
-//                        std::vector<int> canMove;
-                        double largestAngle = 0;
-                        int robotLargestAngle;
-                        for(int i = 0; i < NUMBOTS; ++i)
-                        {
-                            double angleFormed = pointToAngle(getCWNeighbour(i)) - pointToAngle(i);
-                            while(angleFormed < 0)
-                                angleFormed += 2*CV_PI;
-                            while(angleFormed > 2*CV_PI)
-                                angleFormed -= 2*CV_PI;
-                            if(angleFormed > largestAngle)
-                            {
-                                largestAngle = angleFormed;
-                                robotLargestAngle = i;
-                            }
-                        }
 //                        qDebug() << canMove.size() << " can move";
 //                        if(canMove.size() == 2)
 //                        {
@@ -1435,30 +1588,63 @@ void AlgoWorker::onTimeout()
 //                                isBotMoving[canMove[1]] = true;
 //                            }
 //                        }
-                        destinationPoint[robotLargestAngle] = getPointNewAlgo(robotLargestAngle, false);
-                        isBotMoving[robotLargestAngle] = true;
+                    destinationPoint[robotLargestAngle] = getPointNewAlgo(robotLargestAngle, false);
+                    isBotMoving[robotLargestAngle] = true;
 //                        sleep(2);
 //                        sleep(100);
+                }
+            }
+
+            else if (currentAlgo == LYNDON)
+            {
+                qDebug() << "HERE";
+//                    isRunning = false;
+                const double stableAngle = 2.0*CV_PI/((double)NUMBOTS);
+                int n = 0;
+                int i = 1;
+                for(; i < NUMBOTS; ++i)
+                {
+                    n = getCWNeighbour(n);
+                    if(isSameAngle(pointToAngle(n), pointToAngle(0) + stableAngle*i) == false)
+                        break;
+                }
+                qDebug() << i ;
+                for(; ; ++i)
+                {
+                    bool isOccupied = false;
+                    CvPoint p = angleToPoint(pointToAngle(0) + stableAngle*i);
+                    for(int j = 0; j < NUMBOTS; ++j)
+                    {
+                        if(isClose(p, cvPoint(localBS.bot[j].x, localBS.bot[j].y)))
+                        {
+                            isOccupied = true;
+                            break;
+                        }
+                    }
+                    if(isOccupied == false)
+                    {
+                        destinationPoint[n] = angleToPoint(pointToAngle(0) + stableAngle*i);
+                        isBotMoving[n] = true;
+                        break;
                     }
                 }
-                else if (currentAlgo == LYNDON)
+
+
+                if(i < NUMBOTS/2 - 1)
                 {
-                    qDebug() << "HERE";
-//                    isRunning = false;
-                    const double stableAngle = 2.0*CV_PI/((double)NUMBOTS);
-                    int n = 0;
-                    int i = 1;
+                    n = 0;
+                    i = 1;
                     for(; i < NUMBOTS; ++i)
                     {
-                        n = getCWNeighbour(n);
-                        if(isSameAngle(pointToAngle(n), pointToAngle(0) + stableAngle*i) == false)
+                        n = getCCWNeighbour(n);
+                        if(isSameAngle(pointToAngle(n), pointToAngle(0) - stableAngle*i) == false)
                             break;
                     }
-                    qDebug() << i ;
+
                     for(; ; ++i)
                     {
                         bool isOccupied = false;
-                        CvPoint p = angleToPoint(pointToAngle(0) + stableAngle*i);
+                        CvPoint p = angleToPoint(pointToAngle(0) - stableAngle*i);
                         for(int j = 0; j < NUMBOTS; ++j)
                         {
                             if(isClose(p, cvPoint(localBS.bot[j].x, localBS.bot[j].y)))
@@ -1469,90 +1655,76 @@ void AlgoWorker::onTimeout()
                         }
                         if(isOccupied == false)
                         {
-                            destinationPoint[n] = angleToPoint(pointToAngle(0) + stableAngle*i);
+                            destinationPoint[n] = angleToPoint(pointToAngle(0) - stableAngle*i);
                             isBotMoving[n] = true;
                             break;
                         }
                     }
-
-
-                    if(i < NUMBOTS/2 - 1)
-                    {
-                        n = 0;
-                        i = 1;
-                        for(; i < NUMBOTS; ++i)
-                        {
-                            n = getCCWNeighbour(n);
-                            if(isSameAngle(pointToAngle(n), pointToAngle(0) - stableAngle*i) == false)
-                                break;
-                        }
-
-                        for(; ; ++i)
-                        {
-                            bool isOccupied = false;
-                            CvPoint p = angleToPoint(pointToAngle(0) - stableAngle*i);
-                            for(int j = 0; j < NUMBOTS; ++j)
-                            {
-                                if(isClose(p, cvPoint(localBS.bot[j].x, localBS.bot[j].y)))
-                                {
-                                    isOccupied = true;
-                                    break;
-                                }
-                            }
-                            if(isOccupied == false)
-                            {
-                                destinationPoint[n] = angleToPoint(pointToAngle(0) - stableAngle*i);
-                                isBotMoving[n] = true;
-                                break;
-                            }
-                        }
-                    }
                 }
-                else
-                {
-                    destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
-                    isBotMoving[robotActive] = true;
-                }
-//                isBotMoving[robotActive] = true;
             }
-            else if(currentActivationAlgo == DINING_PHILOSOPHER)
+            else
             {
-                int state[NUMBOTS];
+                QString s;
+                s = "Moving: ";
                 for(int i = 0; i < NUMBOTS; ++i)
                 {
-                    state[i] = -1;
-                }
-
-                state[robotActive] = 1;
-                isBotMoving[robotActive] = true;
-                if(currentAlgo == NEW_ALGO)
-                    destinationPoint[robotActive] = getPointNewAlgo(robotActive);
-                else if(currentAlgo == MIDPOINT)
-                    destinationPoint[robotActive] = getPointToMoveAlgo1(robotActive);
-
-                for(int i = 0; i < NUMBOTS; ++i)
-                {
-                    int indexList[2];
-                    getNeighbourIndicesCircle(i, indexList);
-                    if(state[i] == -1)
+                    if(isBotMoving[i])
                     {
-                        if(state[indexList[0]] == 1 || state[indexList[1]] == 1)
-                        {
-                            state[i] = 0;
-                            isBotMoving[i] = false;
-                        }
-                        else
-                        {
-                            state[i] = 1;
-                            isBotMoving[i] = true;
-                            if(currentAlgo == NEW_ALGO)
-                                destinationPoint[i] = getPointNewAlgo(i);
-                            else if(currentAlgo == MIDPOINT)
-                                destinationPoint[i] = getPointToMoveAlgo1(i);
-                        }
+                        s += QString::number(i);
+                        s += ", ";
+                        destinationPoint[i] = getPointToMoveAlgo1(i);
                     }
                 }
+                s += "\nRobotactive: " + QString::number(robotActive);
+                emit gotResult(s);
             }
+
+            QString s;
+            s = "Moving: ";
+            for(int i = 0; i < NUMBOTS; ++i)
+            {
+                if(isBotMoving[i])
+                {
+                    s += QString::number(i);
+                    s += ", ";
+                    destinationPoint[i] = getPointToMoveAlgo1(i);
+                }
+            }
+            s += "\nRobotactive: " + QString::number(robotActive);
+            emit gotResult(s);
+            if(currentAlgo == FAT_ROBOTS)
+            {
+                vector<Robot> r;
+                for(int i = 0; i < NUMBOTS; ++i)
+                {
+                    Robot temp;
+                    temp.currentPosition.x = localBS.bot[i].x;
+                    temp.currentPosition.y = localBS.bot[i].y;
+                    temp.id = i;
+                    localBS.bot[i].angle = temp.angle = atan2(temp.currentPosition.y - destinationCircle.center.y, temp.currentPosition.x - destinationCircle.center.x);
+                    r.push_back(temp);
+                }
+
+                for(int i = 0; i < NUMBOTS; ++i)
+                {
+                    if(i > -1)
+                    {
+                        Position p = ComputeDestination(r, r[i], destinationCircle);
+//                        qDebug() << p.x << " " << p.y;
+//                        qDebug() << destinationCircle.center.x << " " << destinationCircle.center.y;
+//                        qDebug() << r[i].currentPosition.x << " " << r[i].currentPosition.y;
+                        destinationPoint[i].x = p.x;
+                        destinationPoint[i].y = p.y;
+                        isBotMoving[i] = true;
+                    }
+                    else
+                    {
+                        isBotMoving[i] = false;
+                    }
+                }
+
+            }
+
 
             numBotMoving = 0;
             numRounds++;
@@ -1577,6 +1749,7 @@ void AlgoWorker::onTimeout()
                 temp.p[i] = destinationPoint[i];
             }
             emit printDestination(temp);
+//            isRunning = false;
             currentState = POSITIONING_ON_CIRCLE_2;
 //            qDebug() << "In Positioning 1";
         }
@@ -1603,7 +1776,7 @@ void AlgoWorker::onTimeout()
 //                    currentState = FINISHED;
 //                }
 //            }
-//            else if(count == numBotMoving)
+            if(count == numBotMoving)
             {
 //                qDebug() << "inside";
                 robotActive++;
@@ -1662,11 +1835,12 @@ void AlgoWorker::onTimeout()
             s = QString("Number of activations: ") + QString::number(numActivations) + "\n";
             s += "Number of rounds: " + QString::number(numRounds) + "\n";
             s += "Total distance: " + QString::number((int)totDistance) + "\n";
+            s += "Time: " + QString::number(myTimer.elapsed());
             qDebug() << s;
             emit gotResult(s);
 
 
-            result << numActivations << ", " << numRounds << ", " << totDistance;
+            result << numActivations << ", " << numRounds << ", " << totDistance << ", " << myTimer.elapsed();
             result << endl;
 //            result.close();
 //            qDebug() << "Finished";
@@ -1676,7 +1850,7 @@ void AlgoWorker::onTimeout()
 //             sleep(5);
             moveStopAll();
             currentState = MOVE_TO_SAVED_POSITION;
-            isRunning = true;
+            isRunning = false;
             globalCounter++;
 //            sleep(2);
             if(globalCounter == 10)
@@ -1883,4 +2057,11 @@ void AlgoWorker::turnLedOff(int n)
 #ifndef SIMULATION
     s[n].WriteString(std::string("b,0"));
 #endif
+}
+
+
+void AlgoWorker::onResetClicked(int val)
+{
+    globalCounter = val;
+    globalCounter2 = 0;
 }

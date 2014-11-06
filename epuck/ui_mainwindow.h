@@ -21,6 +21,7 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QPlainTextEdit>
 #include <QtGui/QPushButton>
+#include <QtGui/QSpinBox>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolBar>
 #include <QtGui/QVBoxLayout>
@@ -47,6 +48,8 @@ public:
     QPushButton *algoStopButton;
     QLabel *label_4;
     QPlainTextEdit *resultText;
+    QPushButton *resetButton;
+    QSpinBox *configSpinBox;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -74,7 +77,7 @@ public:
         algoStartButton->setGeometry(QRect(760, 420, 98, 27));
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(660, 50, 312, 267));
+        verticalLayoutWidget->setGeometry(QRect(660, 50, 314, 267));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -126,10 +129,16 @@ public:
 
         verticalLayout_2->addWidget(resultText);
 
+        resetButton = new QPushButton(centralWidget);
+        resetButton->setObjectName(QString::fromUtf8("resetButton"));
+        resetButton->setGeometry(QRect(760, 360, 98, 31));
+        configSpinBox = new QSpinBox(centralWidget);
+        configSpinBox->setObjectName(QString::fromUtf8("configSpinBox"));
+        configSpinBox->setGeometry(QRect(690, 360, 51, 31));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 988, 27));
+        menuBar->setGeometry(QRect(0, 0, 988, 29));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -158,16 +167,18 @@ public:
          << QApplication::translate("MainWindow", "Mid - Point", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "State based", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Lyndon words", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Node counting", 0, QApplication::UnicodeUTF8)
         );
         algoActivationComboBox->clear();
         algoActivationComboBox->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "One at a time (prob 0)", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "All together (prob 1)", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "50% probability", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "0.5", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "0.25", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Round robin (dining philosopher)", 0, QApplication::UnicodeUTF8)
         );
         algoStopButton->setText(QApplication::translate("MainWindow", "Start/Pause", 0, QApplication::UnicodeUTF8));
         label_4->setText(QApplication::translate("MainWindow", "Result", 0, QApplication::UnicodeUTF8));
+        resetButton->setText(QApplication::translate("MainWindow", "Reset", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

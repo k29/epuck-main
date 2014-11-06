@@ -34,6 +34,8 @@ private slots:
 
     void on_algoActivationComboBox_currentIndexChanged(int index);
 
+    void on_resetButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     void IplImage2QImage(IplImage *iplImg, QImage *image);
@@ -52,6 +54,7 @@ signals:
     void stopAlgo();
     void algoChanged(int index);
     void algoActivationChanged(int index);
+    void resetClicked(int val);
 };
 
 #endif // MAINWINDOW_H

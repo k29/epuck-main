@@ -8,7 +8,7 @@ class BeliefState
 public:
     BeliefState();
     Bot bot[NUMBOTS];
-
+    int node[NODE_ROWS][NODE_COLS];
 };
 
 #endif // BELIEFSTATE_H

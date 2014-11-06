@@ -54,6 +54,7 @@ private:
     Circle circle;
     bool isDestinationPresent;
     bool isCirclePresent;
+    void printNodes();
 };
 
 #endif // CAMERAWORKER_H

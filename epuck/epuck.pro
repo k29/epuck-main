@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     featuredetection.cpp \
     beliefstate.cpp \
     algoworker.cpp \
-    hungarian.cpp
+    hungarian.cpp \
+    ComputeDestination.cpp
 
 HEADERS  += mainwindow.h \
     cameraworker.h \
@@ -35,7 +36,10 @@ HEADERS  += mainwindow.h \
     featuredetection.h \
     beliefstate.h \
     algoworker.h \
-    hungarian.h
+    hungarian.h \
+    intersection.h \
+    position.hpp \
+    ComputeDestination.hpp
 
 FORMS    += mainwindow.ui
 

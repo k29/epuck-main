@@ -13,6 +13,7 @@
 #include "commondefs.h"
 #include "hungarian.h"
 #include <fstream>
+#include <QTime>
 
 
 //non simulation values
@@ -29,8 +30,10 @@
 #define DISTANCE_THRESHOLD_FINE 8.0
 #define FINAL_REACHED_THRESHOLD 18.0
 
-enum AlgoState {SAVE_CURRENT_POSITION, MOVE_TO_SAVED_POSITION, MAKE_CIRCLE, MOVE_TO_CIRCLE, POSITIONING_ON_CIRCLE_1, POSITIONING_ON_CIRCLE_2, FINISHED, CALCULATE_POINTS_HUNGARIAN, MOVE_TO_POINTS};
-enum Algorithm {MIDPOINT, NEW_ALGO, LYNDON, END_ALGO};
+
+
+enum AlgoState {SAVE_CURRENT_POSITION, MOVE_TO_SAVED_POSITION, MAKE_CIRCLE, FAT_ROBOTS_STATE, MOVE_TO_CIRCLE, POSITIONING_ON_CIRCLE_1, POSITIONING_ON_CIRCLE_2, FINISHED, CALCULATE_POINTS_HUNGARIAN, MOVE_TO_POINTS};
+enum Algorithm {MIDPOINT, NEW_ALGO, LYNDON, NODE_COUNTING, FAT_ROBOTS, END_ALGO};
 enum ActivationAlgorithm {PROBABILISTIC_0, PROBABILISTIC_HALF, PROBABILISTIC_QUARTER, DINING_PHILOSOPHER, PROBABILISTIC_1 };
 enum MoveDirection {FORWARD, BACKWARD, LEFT, RIGHT, STOP};
 class AlgoWorker : public QObject
@@ -45,6 +48,7 @@ public slots:
     void onStopAlgo();
     void onAlgoChanged(int index);
     void onAlgoActivationChanged(int index);
+    void onResetClicked(int val);
 signals:
     void gotLine(int x1, int y1, int x2, int y2);
     void printDestination(PointList p);
@@ -75,7 +79,7 @@ private:
         }
     };
 
-
+    QTime myTimer;
     HAL::Serial s[NUMBOTS];
     QTimer *timer;
     QMutex* bsMutex;
@@ -148,6 +152,8 @@ private:
     CvPoint savePositionNew[10][NUMBOTS];
     std::fstream result;
     bool isSameAngle(double a1, double a2);
+    int lastRobot;
+    CvPoint gridPosition[NUMBOTS];
 };
 
 #endif // ALGOWORKER_H

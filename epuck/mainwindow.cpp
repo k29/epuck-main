@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, SIGNAL(stopCamThread()), cw, SLOT(onStop()));
 
+
     connect(cw, SIGNAL(imageReady(QPixmap*)), this, SLOT(onCamImageReady(QPixmap*)));
 
     cameraThread->start(QThread::TimeCriticalPriority);
@@ -45,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(stopAlgoThread()), aw, SLOT(onStop()));
     connect(this, SIGNAL(algoChanged(int)), aw, SLOT(onAlgoChanged(int)));
     connect(this, SIGNAL(algoActivationChanged(int)), aw, SLOT(onAlgoActivationChanged(int)));
+    connect(this, SIGNAL(resetClicked(int)), aw, SLOT(onResetClicked(int)));
     connect(aw, SIGNAL(gotResult(QString)), this, SLOT(onGetResult(QString)));
 
     connect(this, SIGNAL(stopAlgo()), aw, SLOT(onStopAlgo()));
@@ -55,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(aw, SIGNAL(gotLine(int, int, int, int)), cw, SLOT(onGotLine(int, int, int, int)));
     connect(aw, SIGNAL(printDestination(PointList)), cw, SLOT(onPrintDestination(PointList)));
     connect(aw, SIGNAL(printCircle(Circle)), cw, SLOT(onPrintCircle(Circle)));
+
     getfps.start();
 
 }
@@ -117,4 +120,9 @@ void MainWindow::on_algoActivationComboBox_currentIndexChanged(int index)
 void MainWindow::onGetResult(QString s)
 {
     ui->resultText->setPlainText(s);
+}
+
+void MainWindow::on_resetButton_clicked()
+{
+    emit resetClicked(ui->configSpinBox->value());
 }
