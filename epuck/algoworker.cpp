@@ -58,7 +58,7 @@ void AlgoWorker::process()
     frameCounter = 0;
 //    isRunning = false;
     currentState = MOVE_TO_SAVED_POSITION;
-    currentAlgo = NODE_COUNTING;
+    currentAlgo = MIDPOINT;
     currentActivationAlgo = PROBABILISTIC_0;
     result.open("output5STATE-REAL.txt", ios::out);
     robotActive = 0;
@@ -116,6 +116,7 @@ void AlgoWorker::process()
         for(int j = 0; j < NODE_COLS; ++j)
         {
             localBS.node[i][j] = 0;
+            localBS.node_MDFS[i][j].state = Cell_MDFS::UNEXPLORED;
         }
     }
     localBS.node[5][5] = -1;

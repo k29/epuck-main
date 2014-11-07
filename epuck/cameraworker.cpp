@@ -94,7 +94,7 @@ void CameraWorker::onTimeout()
 //    fd->updateBeliefStateSimulation();
     //also draw bots on the image
     fd->printBotSimulation(cc, **bs);
-    printNodes();
+//    printNodes();
 #endif
     bsMutex->unlock();
 

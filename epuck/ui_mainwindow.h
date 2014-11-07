@@ -168,6 +168,7 @@ public:
          << QApplication::translate("MainWindow", "State based", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Lyndon words", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Node counting", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "MDFS", 0, QApplication::UnicodeUTF8)
         );
         algoActivationComboBox->clear();
         algoActivationComboBox->insertItems(0, QStringList()
