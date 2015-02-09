@@ -24,7 +24,6 @@ public:
 };
 
 
-
 #define BLOB_MIN_AREA 100
 #define unit (10)
 

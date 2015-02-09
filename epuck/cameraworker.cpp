@@ -70,8 +70,20 @@ void CameraWorker::printNodes()
                 sprintf(buf, "%d", (*bs)->node[i][j]);
                 CvFont font;
                 cvInitFont(&font, CV_FONT_HERSHEY_PLAIN, 1, 1);
-                cvPutText(cc->rgbimg, buf, cvPoint(i*width +width/2, j*height +height/2), &font, cvScalar(0,0,0));
-//                cvPutText(cc->rgbimg, buf, cvPoint(p1.x-1, p1.y - 21), &font, cvScalar(0,255,255));
+                //qDebug()<<"wohoooo!! the curent algo is "<<(*bs)->current_algo;
+                if((*bs)->current_algo==3)
+                    cvPutText(cc->rgbimg, buf, cvPoint(i*width +width/2, j*height +height/2), &font, cvScalar(0,0,0));
+//                  cvPutText(cc->rgbimg, buf, cvPoint(p1.x-1, p1.y - 21), &font, cvScalar(0,255,255));
+//                if((*bs)->current_algo==4 || (*bs)->current_algo==5)
+//                {
+//                    if(*buf=='0')
+//                        cvRectangle(cc->rgbimg, cvPoint(i*width, j*height), cvPoint(i*width+width, j*height+height),
+//                                cvScalar(200,200,200), -1);
+//                    else if(*buf=='1')
+//                        cvRectangle(cc->rgbimg, cvPoint(i*width, j*height), cvPoint(i*width+width, j*height+height),
+//                                cvScalar(192,192,192), -1);
+//                }
+
             }
         }
     }
@@ -94,7 +106,7 @@ void CameraWorker::onTimeout()
 //    fd->updateBeliefStateSimulation();
     //also draw bots on the image
     fd->printBotSimulation(cc, **bs);
-//    printNodes();
+    printNodes();
 #endif
     bsMutex->unlock();
 

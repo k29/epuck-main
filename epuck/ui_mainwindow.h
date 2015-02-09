@@ -77,7 +77,7 @@ public:
         algoStartButton->setGeometry(QRect(760, 420, 98, 27));
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(660, 50, 314, 267));
+        verticalLayoutWidget->setGeometry(QRect(660, 50, 335, 267));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -138,7 +138,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 988, 29));
+        menuBar->setGeometry(QRect(0, 0, 988, 25));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -167,8 +167,9 @@ public:
          << QApplication::translate("MainWindow", "Mid - Point", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "State based", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "Lyndon words", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("MainWindow", "Node counting", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Node counting/Ants", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("MainWindow", "MDFS", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Brick - Mortar", 0, QApplication::UnicodeUTF8)
         );
         algoActivationComboBox->clear();
         algoActivationComboBox->insertItems(0, QStringList()

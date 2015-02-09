@@ -17,6 +17,7 @@ public:
 class BeliefState
 {
 public:
+    int current_algo;
     BeliefState();
     Bot bot[NUMBOTS];
     int node[NODE_ROWS][NODE_COLS];

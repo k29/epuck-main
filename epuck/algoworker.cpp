@@ -1271,6 +1271,199 @@ void AlgoWorker::onTimeout()
         else
             moveStopAll();
     }
+    else if (currentAlgo==MDFS)
+    {
+        for(int i = 0; i < NUMBOTS; ++i)
+        {
+            savePositionNew[0][i] = cvPoint(gridPosition[i].y*(640/NODE_COLS) + (320/NODE_COLS),
+                                            gridPosition[i].x*(480/NODE_ROWS) + (320/NODE_ROWS));
+        }
+        for(int i = 0; i < NODE_ROWS; ++i)
+        {
+            for(int j = 0; j < NODE_COLS; ++j)
+            {
+                localBS.node[i][j] = 0;
+                localBS.node_MDFS[i][j].state = Cell_MDFS::UNEXPLORED;
+            }
+        }
+        localBS.node[5][5] = -1;
+//        localBS.node[7][8] = -1;
+//        localBS.node[9][10] = -1;
+//        localBS.node[11][12] = -1;
+//        localBS.node[13][16] = -1;
+        localBS.node[18][1] = -1;
+
+        if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
+        {
+            switch(currentState)
+            {
+                case MOVE_TO_SAVED_POSITION:
+                {
+                    int numCompleted = 0;
+                    totDistance = 0.0;
+                    numRounds = 0;
+                    numActivations = 0;
+                    for(int i = 0; i < NUMBOTS; ++i)
+                    {
+                        if(moveToPoint(savePositionNew[globalCounter][i], localBS.bot[i], i))
+                            numCompleted++;
+                    }
+                    if(numCompleted == NUMBOTS)
+                    {
+//                        qDebug() << "Reached random points";
+                        currentState = FINISHED;
+                    }
+                }
+                break;
+                case FINISHED:
+                {
+                    for(int i = 0; i < NUMBOTS; ++i)
+                    {
+                        int row = gridPosition[i].y;
+                        int col = gridPosition[i].x;
+                        int minRow = -1, minCol = -1;
+                        int minVal = 999999;
+
+                        if(row > 0)
+                        {
+                            if(localBS.node[row-1][col] < minVal && localBS.node[row-1][col] >= 0)
+                            {
+                                minRow = row-1;
+                                minCol = col;
+                                minVal = localBS.node[row-1][col];
+                            }
+                        }
+
+                        if(col > 0)
+                        {
+                            if(localBS.node[row][col-1] < minVal && localBS.node[row][col-1] >= 0)
+                            {
+                                minRow = row;
+                                minCol = col-1;
+                                minVal = localBS.node[row][col-1];
+                            }
+                        }
+
+                        if(row < NODE_ROWS-1)
+                        {
+                            if(localBS.node[row+1][col] < minVal && localBS.node[row+1][col] >= 0)
+                            {
+                                minRow = row+1;
+                                minCol = col;
+                                minVal = localBS.node[row+1][col];
+                            }
+                        }
+
+                        if(col < NODE_COLS-1)
+                        {
+                            if(localBS.node[row][col+1] < minVal && localBS.node[row][col+1] >= 0)
+                            {
+                                minRow = row;
+                                minCol = col+1;
+                                minVal = localBS.node[row][col+1];
+                            }
+                        }
+
+                        localBS.node[minRow][minCol]++;
+                        gridPosition[i] = cvPoint(minCol, minRow);
+                    }
+                    currentState = MOVE_TO_SAVED_POSITION;
+                }
+                break;
+            }
+        }
+        else
+            moveStopAll();
+    }
+    else if (currentAlgo==BRICK_AND_MORTAR)
+    {
+        for(int i = 0; i < NUMBOTS; ++i)
+        {
+            savePositionNew[0][i] = cvPoint(gridPosition[i].y*(640/NODE_COLS) + (320/NODE_COLS),
+                                            gridPosition[i].x*(480/NODE_ROWS) + (320/NODE_ROWS));
+        }
+        if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
+        {
+            switch(currentState)
+            {
+                case MOVE_TO_SAVED_POSITION:
+                {
+                    int numCompleted = 0;
+                    totDistance = 0.0;
+                    numRounds = 0;
+                    numActivations = 0;
+                    for(int i = 0; i < NUMBOTS; ++i)
+                    {
+                        if(moveToPoint(savePositionNew[globalCounter][i], localBS.bot[i], i))
+                            numCompleted++;
+                    }
+                    if(numCompleted == NUMBOTS)
+                    {
+//                        qDebug() << "Reached random points";
+                        currentState = FINISHED;
+                    }
+                }
+                break;
+                case FINISHED:
+                {
+                    for(int i = 0; i < NUMBOTS; ++i)
+                    {
+                        int row = gridPosition[i].y;
+                        int col = gridPosition[i].x;
+                        int minRow = -1, minCol = -1;
+                        int minVal = 999999;
+
+                        if(row > 0)
+                        {
+                            if(localBS.node[row-1][col] < minVal && localBS.node[row-1][col] >= 0)
+                            {
+                                minRow = row-1;
+                                minCol = col;
+                                minVal = localBS.node[row-1][col];
+                            }
+                        }
+
+                        if(col > 0)
+                        {
+                            if(localBS.node[row][col-1] < minVal && localBS.node[row][col-1] >= 0)
+                            {
+                                minRow = row;
+                                minCol = col-1;
+                                minVal = localBS.node[row][col-1];
+                            }
+                        }
+
+                        if(row < NODE_ROWS-1)
+                        {
+                            if(localBS.node[row+1][col] < minVal && localBS.node[row+1][col] >= 0)
+                            {
+                                minRow = row+1;
+                                minCol = col;
+                                minVal = localBS.node[row+1][col];
+                            }
+                        }
+
+                        if(col < NODE_COLS-1)
+                        {
+                            if(localBS.node[row][col+1] < minVal && localBS.node[row][col+1] >= 0)
+                            {
+                                minRow = row;
+                                minCol = col+1;
+                                minVal = localBS.node[row][col+1];
+                            }
+                        }
+
+                        localBS.node[minRow][minCol]++;
+                        gridPosition[i] = cvPoint(minCol, minRow);
+                    }
+                    currentState = MOVE_TO_SAVED_POSITION;
+                }
+                break;
+            }
+        }
+        else
+            moveStopAll();
+    }
     else if(allBotVisible == NUMBOTS && isBSAvailable && isRunning)
     {
 //        qDebug() << "YOOOOOOOOOOO\n";
@@ -2038,11 +2231,13 @@ void AlgoWorker::onStopAlgo()
 void AlgoWorker::onAlgoChanged(int index)
 {
     currentAlgo = (Algorithm) index;
+    localBS.current_algo=index;
+    qDebug()<<" the current algo in onAlgoACtivationchanged is "<<localBS.current_algo;
 }
 
 void AlgoWorker::onAlgoActivationChanged(int index)
 {
-//    qDebug() << "changed";
+    qDebug() << "changed";
     currentActivationAlgo = (ActivationAlgorithm) index;
 }
 
